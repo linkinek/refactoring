@@ -4,10 +4,11 @@ import edu.refactor.demo.customer.Customer;
 import edu.refactor.demo.vehicle.Vehicle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
-public class VehicleRental {
+public class VehicleRental implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue
@@ -25,6 +26,14 @@ public class VehicleRental {
     private Instant endRent;
     @Column
     private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Instant getStartRent() {
         return startRent;

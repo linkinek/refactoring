@@ -8,13 +8,30 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity public class Customer           implements Serializable {
-    private static final long serialVersionUID = 1L;@Column public String login;@Column public String email;
-    @Column public Instant registration;@Column public String status;@Id @GeneratedValue @Column public Long id;@Transient @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true) public List<VehicleRental> rentals = new ArrayList<>();
+@Entity
+public class Customer implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Column
+    public String login;
+    @Column
+    public String email;
+    @Column
+    public Instant registration;
+    @Column
+    public String status;
+    @Id
+    @GeneratedValue
+    @Column
+    public Long id;
+    @Transient
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<VehicleRental> rentals = new ArrayList<>();
 
     public List<VehicleRental> getRentals() {
         return rentals;
-    }public void setRentals(List<VehicleRental> rentals) {
+    }
+
+    public void setRentals(List<VehicleRental> rentals) {
         this.rentals = rentals;
     }
 
@@ -29,12 +46,9 @@ import java.util.List;
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
-
-
-
-
     }
 
     public Instant getRegistration() {
@@ -45,9 +59,13 @@ import java.util.List;
         this.registration = registration;
     }
 
+    public Long getId() {
+        return id;
+    }
 
-
-
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getStatus() {
         return status;
