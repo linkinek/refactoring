@@ -50,7 +50,7 @@ public class VehicleRentalService {
         Optional<VehicleRental> rental = vehicleRentalDao.findById(rentalId);
         if (rental.isPresent()) {
             VehicleRental vehicleRental = rental.get();
-            if (vehicleRental.getStatus().equals("created")) {
+            if (vehicleRental.getStatus().equals("created") || vehicleRental.getStatus().equals("expired")) {
                 vehicleRental.setEndRent(Instant.now());
                 vehicleRental.setStatus("active");
                 return vehicleRentalDao.save(vehicleRental);
@@ -89,4 +89,5 @@ public class VehicleRentalService {
         }
         return null;
     }
+
 }

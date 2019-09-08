@@ -26,6 +26,16 @@ public class Customer implements Serializable {
     @Transient
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<VehicleRental> rentals = new ArrayList<>();
+    @Column
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public List<VehicleRental> getRentals() {
         return rentals;

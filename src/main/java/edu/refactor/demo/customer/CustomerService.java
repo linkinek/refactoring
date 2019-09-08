@@ -74,6 +74,7 @@ public class CustomerService {
         Customer customer = new Customer();
         customer.setEmail(email);
         customer.setLogin(login);
+        customer.setCategory("default");
         customer.setRegistration(Instant.now());
         customer.setStatus("active");
         return customerDAO.save(customer);
