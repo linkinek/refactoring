@@ -1,5 +1,6 @@
 package edu.refactor.demo.customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.refactor.demo.rental.VehicleRental;
 
 import javax.persistence.*;
@@ -23,65 +24,14 @@ public class Customer implements Serializable {
     @GeneratedValue
     @Column
     public Long id;
-    @Transient
+
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<VehicleRental> rentals = new ArrayList<>();
     @Column
-    private String category;
+    public String category;
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public List<VehicleRental> getRentals() {
-        return rentals;
-    }
-
-    public void setRentals(List<VehicleRental> rentals) {
-        this.rentals = rentals;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Instant getRegistration() {
-        return registration;
-    }
-
-    public void setRegistration(Instant registration) {
-        this.registration = registration;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<BillingAccount> billingAccounts;
 }

@@ -1,5 +1,7 @@
 package edu.refactor.demo.rental;
 
+import edu.refactor.demo.customer.BillingAccount;
+import edu.refactor.demo.customer.BillingAccountDAO;
 import edu.refactor.demo.customer.Customer;
 import edu.refactor.demo.customer.CustomerDAO;
 import edu.refactor.demo.vehicle.Vehicle;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,12 +18,14 @@ public class VehicleRentalService {
     private final CustomerDAO customerDAO;
     private final VehicleRentalDAO vehicleRentalDao;
     private final VehicleDAO vehicleDAO;
+    private final BillingAccountDAO billingAccountDAO;
 
     @Autowired
-    public VehicleRentalService(CustomerDAO customerDAO, VehicleRentalDAO vehicleRentalDao, VehicleDAO vehicleDAO) {
+    public VehicleRentalService(CustomerDAO customerDAO, VehicleRentalDAO vehicleRentalDao, VehicleDAO vehicleDAO, BillingAccountDAO billingAccountDAO) {
         this.customerDAO = customerDAO;
         this.vehicleRentalDao = vehicleRentalDao;
         this.vehicleDAO = vehicleDAO;
+        this.billingAccountDAO = billingAccountDAO;
     }
 
     @RequestMapping(value = "/rental", method = RequestMethod.GET)
@@ -35,9 +40,28 @@ public class VehicleRentalService {
         Optional<VehicleRental> rental = vehicleRentalDao.findById(rentalId);
         if (rental.isPresent()) {
             VehicleRental vehicleRental = rental.get();
-            if (vehicleRental.getStatus().equals("active")) {
-                vehicleRental.setEndRent(Instant.now());
-                vehicleRental.setStatus("completed");
+            if (vehicleRental.status.equals("active")) {
+                vehicleRental.endRent = (Instant.now());
+                vehicleRental.status = ("completed");
+                List<BillingAccount> billingAccounts = vehicleRental.customer.billingAccounts;
+                double value = vehicleRental.vehicle.price;
+                for (BillingAccount account : billingAccounts) {
+                    if (value <= 0) {
+                        break;
+                    }
+                    double v = account.money - value;
+                    if (v >= 0) {
+                        value -= v;
+                        account.money = v;
+                    } else {
+                        value -= account.money;
+                        account.money = 0;
+                    }
+                }
+                if (value < 0) {
+                    throw new IllegalStateException("value<0");
+                }
+                billingAccountDAO.saveAll(billingAccounts);
                 return vehicleRentalDao.save(vehicleRental);
             }
         }
@@ -50,9 +74,9 @@ public class VehicleRentalService {
         Optional<VehicleRental> rental = vehicleRentalDao.findById(rentalId);
         if (rental.isPresent()) {
             VehicleRental vehicleRental = rental.get();
-            if (vehicleRental.getStatus().equals("created") || vehicleRental.getStatus().equals("expired")) {
-                vehicleRental.setEndRent(Instant.now());
-                vehicleRental.setStatus("active");
+            if (vehicleRental.status.equals("created") || vehicleRental.status.equals("expired")) {
+                vehicleRental.endRent = (Instant.now());
+                vehicleRental.status = ("active");
                 return vehicleRentalDao.save(vehicleRental);
             }
         }
@@ -65,9 +89,9 @@ public class VehicleRentalService {
         Optional<VehicleRental> rental = vehicleRentalDao.findById(rentalId);
         if (rental.isPresent()) {
             VehicleRental vehicleRental = rental.get();
-            if (vehicleRental.getStatus().equals("active")) {
-                vehicleRental.setEndRent(Instant.now());
-                vehicleRental.setStatus("expired");
+            if (vehicleRental.status.equals("active")) {
+                vehicleRental.endRent = (Instant.now());
+                vehicleRental.status = ("expired");
                 return vehicleRentalDao.save(vehicleRental);
             }
         }
@@ -81,10 +105,10 @@ public class VehicleRentalService {
         Optional<Vehicle> vehicle = vehicleDAO.findById(vehicleId);
         if (customer.isPresent() && vehicle.isPresent()) {
             VehicleRental vehicleRental = new VehicleRental();
-            vehicleRental.setStatus("created");
-            vehicleRental.setCustomer(customer.get());
-            vehicleRental.setVehicle(vehicle.get());
-            vehicleRental.setStartRent(Instant.now());
+            vehicleRental.status = ("created");
+            vehicleRental.customer = (customer.get());
+            vehicleRental.vehicle = (vehicle.get());
+            vehicleRental.startRent = (Instant.now());
             return vehicleRentalDao.save(vehicleRental);
         }
         return null;
