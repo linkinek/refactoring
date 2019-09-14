@@ -1,4 +1,4 @@
-package edu.refactor.demo.vehicle;
+package edu.refactor.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -131,12 +131,12 @@ public class VehicleService {
                           @RequestParam(name = "price") double price,
                           @RequestParam(name = "type") String type,
                           @RequestParam(name = "serialNumber") String serialNumber) {
-        Vehicle vehicle = new Vehicle();
-        vehicle.status = "open";
-        vehicle.price = price;
-        vehicle.title = title;
-        vehicle.type = type;
-        vehicle.serialNumber = (serialNumber);
-        return vehicleDAO.save(vehicle);
+        Vehicle v = new Vehicle();
+        v.status = "open";
+        v.price = price;
+        v.title = title;
+        v.type = type;
+        v.serialNumber = (serialNumber);
+        return vehicleDAO.save(v);
     }
 }

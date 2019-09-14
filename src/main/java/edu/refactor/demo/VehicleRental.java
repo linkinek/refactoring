@@ -1,7 +1,4 @@
-package edu.refactor.demo.rental;
-
-import edu.refactor.demo.customer.Customer;
-import edu.refactor.demo.vehicle.Vehicle;
+package edu.refactor.demo;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,11 +1,5 @@
-package edu.refactor.demo.rental;
+package edu.refactor.demo;
 
-import edu.refactor.demo.customer.BillingAccount;
-import edu.refactor.demo.customer.BillingAccountDAO;
-import edu.refactor.demo.customer.Customer;
-import edu.refactor.demo.customer.CustomerDAO;
-import edu.refactor.demo.vehicle.Vehicle;
-import edu.refactor.demo.vehicle.VehicleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,32 +31,22 @@ public class VehicleRentalService {
     @RequestMapping(value = "/rental/complete", method = RequestMethod.POST)
     public @ResponseBody
     VehicleRental completeVehicle(@RequestParam(name = "rental") Long rentalId) {
-        Optional<VehicleRental> rental = vehicleRentalDao.findById(rentalId);
-        if (rental.isPresent()) {
-            VehicleRental vehicleRental = rental.get();
-            if (vehicleRental.status.equals("active")) {
-                vehicleRental.endRent = (Instant.now());
-                vehicleRental.status = ("completed");
-                List<BillingAccount> billingAccounts = vehicleRental.customer.billingAccounts;
-                double value = vehicleRental.vehicle.price;
-                for (BillingAccount account : billingAccounts) {
-                    if (value <= 0) {
-                        break;
-                    }
-                    double v = account.money - value;
-                    if (v >= 0) {
-                        value -= v;
-                        account.money = v;
-                    } else {
-                        value -= account.money;
-                        account.money = 0;
-                    }
+        Optional<VehicleRental> ro = vehicleRentalDao.findById(rentalId);
+        if (ro.isPresent()) {
+            VehicleRental vr = ro.get();
+            if (vr.status.equals("active")) {
+                vr.endRent = (Instant.now());
+                vr.status = ("completed");
+                List<BillingAccount> bs = vr.customer.billingAccounts;
+                double value = vr.vehicle.price;
+                for (BillingAccount ba : bs) {
+                    double v = ba.money - value;if (v >= 0) { value -= v;ba.money = v; } else { value -= ba.money;ba.money = 0; }
                 }
                 if (value < 0) {
                     throw new IllegalStateException("value<0");
                 }
-                billingAccountDAO.saveAll(billingAccounts);
-                return vehicleRentalDao.save(vehicleRental);
+                billingAccountDAO.saveAll(bs);
+                return vehicleRentalDao.save(vr);
             }
         }
         return null;

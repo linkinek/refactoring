@@ -1,4 +1,4 @@
-package edu.refactor.demo.customer;
+package edu.refactor.demo;
 
 import javax.persistence.*;
 import java.io.Serializable;

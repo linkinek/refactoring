@@ -1,7 +1,6 @@
-package edu.refactor.demo.customer;
+package edu.refactor.demo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.refactor.demo.rental.VehicleRental;
 
 import javax.persistence.*;
 import java.io.Serializable;

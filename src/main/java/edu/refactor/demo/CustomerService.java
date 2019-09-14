@@ -1,4 +1,4 @@
-package edu.refactor.demo.customer;
+package edu.refactor.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +32,11 @@ public class CustomerService {
     @RequestMapping(value = "/customer/freeze", method = RequestMethod.POST)
     public @ResponseBody
     Customer freeze(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
-        Iterable<Customer> customers = customerDAO.findAll();
-        for (Customer customer : customers) {
-            if (customer.login.equals(login) && customer.email.equals(email)) {
-                customer.status = ("freeze");
-                return customerDAO.save(customer);
+        Iterable<Customer> cs = customerDAO.findAll();
+        for (Customer c : cs) {
+            if (c.login.equals(login) && c.email.equals(email)) {
+                c.status = ("freeze");
+                return customerDAO.save(c);
             }
         }
         throw new RuntimeException("freeze error");
@@ -58,11 +58,11 @@ public class CustomerService {
     @RequestMapping(value = "/customer/active", method = RequestMethod.POST)
     public @ResponseBody
     Customer active(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
-        Iterable<Customer> customers = customerDAO.findAll();
-        for (Customer customer : customers) {
-            if (customer.login.equals(login) && customer.email.equals(email)) {
-                customer.status = ("active");
-                return customerDAO.save(customer);
+        Iterable<Customer> cs = customerDAO.findAll();
+        for (Customer c : cs) {
+            if (c.login.equals(login) && c.email.equals(email)) {
+                c.status = ("active");
+                return customerDAO.save(c);
             }
         }
         throw new RuntimeException("active error");
@@ -91,20 +91,20 @@ public class CustomerService {
                 throw new RuntimeException("Create customer error");
             }
         }
-        Customer customer = new Customer();
-        customer.email = (email);
-        customer.login = (login);
-        customer.category = ("default");
-        customer.registration = (Instant.now());
-        customer.status = ("active");
-        customer = entityManager.merge(customer);
-        BillingAccount billingAccount = new BillingAccount();
-        billingAccount.customer = customer;
-        billingAccount.createdDate = Instant.now();
-        billingAccount.isPrimary = true;
-        billingAccount.money = 0;
-        billingAccount = entityManager.merge(billingAccount);
+        Customer c = new Customer();
+        c.email = (email);
+        c.login = (login);
+        c.category = ("default");
+        c.registration = (Instant.now());
+        c.status = ("active");
+        c = entityManager.merge(c);
+        BillingAccount b = new BillingAccount();
+        b.customer = c;
+        b.createdDate = Instant.now();
+        b.isPrimary = true;
+        b.money = 0;
+        b = entityManager.merge(b);
         transaction.commit();
-        return entityManager.find(Customer.class, billingAccount.customer.id);
+        return entityManager.find(Customer.class, b.customer.id);
     }
 }

@@ -1,4 +1,4 @@
-package edu.refactor.demo.customer;
+package edu.refactor.demo;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
