@@ -6,21 +6,75 @@ import java.time.Instant;
 
 @Entity
 public class VehicleRental implements Serializable {
-    public static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue
     @Column
-    public Long id;
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
-    public Vehicle vehicle;
+    private Vehicle vehicle;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    public Customer customer;
+    private Customer customer;
+
     @Column
-    public Instant startRent;
+    private Instant startRent;
+
     @Column
-    public Instant endRent;
+    private Instant endRent;
+
     @Column
-    public String status;
+    private String status;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Instant getStartRent() {
+        return startRent;
+    }
+
+    public void setStartRent(Instant startRent) {
+        this.startRent = startRent;
+    }
+
+    public Instant getEndRent() {
+        return endRent;
+    }
+
+    public void setEndRent(Instant endRent) {
+        this.endRent = endRent;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

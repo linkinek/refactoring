@@ -23,9 +23,9 @@ public class VehicleService {
     boolean statusUpdate(@RequestParam(name = "serialNumber") String serialNumber, @RequestParam(name = "status") String nextStatus) {
         if (nextStatus.equals("delete")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
-                if (vehicle.serialNumber.equals(serialNumber)) {
-                    if (vehicle.status.equals("open")) {
-                        vehicle.status = (nextStatus);
+                if (vehicle.getSerialNumber().equals(serialNumber)) {
+                    if (vehicle.getStatus().equals("open")) {
+                        vehicle.setStatus(nextStatus);
                         vehicleDAO.save(vehicle);
                         return true;
                     }
@@ -35,9 +35,9 @@ public class VehicleService {
         }
         if (nextStatus.equals("reserved")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
-                if (vehicle.serialNumber.equals(serialNumber)) {
-                    if (vehicle.status.equals("open")) {
-                        vehicle.status = (nextStatus);
+                if (vehicle.getSerialNumber().equals(serialNumber)) {
+                    if (vehicle.getStatus().equals("open")) {
+                        vehicle.setStatus(nextStatus);
                         vehicleDAO.save(vehicle);
                         return true;
                     }
@@ -47,9 +47,9 @@ public class VehicleService {
         }
         if (nextStatus.equals("leased")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
-                if (vehicle.serialNumber.equals(serialNumber)) {
-                    if (vehicle.status.equals("reserved")) {
-                        vehicle.status = (nextStatus);
+                if (vehicle.getSerialNumber().equals(serialNumber)) {
+                    if (vehicle.getStatus().equals("reserved")) {
+                        vehicle.setStatus(nextStatus);
                         vehicleDAO.save(vehicle);
                         return true;
                     }
@@ -60,9 +60,9 @@ public class VehicleService {
 
         if (nextStatus.equals("lost")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
-                if (vehicle.serialNumber.equals(serialNumber)) {
-                    if (vehicle.status.equals("leased")) {
-                        vehicle.status = (nextStatus);
+                if (vehicle.getSerialNumber().equals(serialNumber)) {
+                    if (vehicle.getStatus().equals("leased")) {
+                        vehicle.setStatus(nextStatus);
                         vehicleDAO.save(vehicle);
                         return true;
                     }
@@ -73,9 +73,9 @@ public class VehicleService {
 
         if (nextStatus.equals("returned")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
-                if (vehicle.serialNumber.equals(serialNumber)) {
-                    if (vehicle.status.equals("leased")) {
-                        vehicle.status = (nextStatus);
+                if (vehicle.getSerialNumber().equals(serialNumber)) {
+                    if (vehicle.getStatus().equals("leased")) {
+                        vehicle.setStatus(nextStatus);
                         vehicleDAO.save(vehicle);
                         return true;
                     }
@@ -86,9 +86,9 @@ public class VehicleService {
 
         if (nextStatus.equals("service")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
-                if (vehicle.serialNumber.equals(serialNumber)) {
-                    if (vehicle.status.equals("returned")) {
-                        vehicle.status = (nextStatus);
+                if (vehicle.getSerialNumber().equals(serialNumber)) {
+                    if (vehicle.getStatus().equals("returned")) {
+                        vehicle.setStatus(nextStatus);
                         vehicleDAO.save(vehicle);
                         return true;
                     }
@@ -100,9 +100,9 @@ public class VehicleService {
 
         if (nextStatus.equals("open")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
-                if (vehicle.serialNumber.equals(serialNumber)) {
-                    if (vehicle.status.equals("service")) {
-                        vehicle.status = (nextStatus);
+                if (vehicle.getSerialNumber().equals(serialNumber)) {
+                    if (vehicle.getStatus().equals("service")) {
+                        vehicle.setStatus(nextStatus);
                         vehicleDAO.save(vehicle);
                         return true;
                     }
@@ -112,9 +112,9 @@ public class VehicleService {
         }
         if (nextStatus.equals("open")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
-                if (vehicle.serialNumber.equals(serialNumber)) {
-                    if (vehicle.status.equals("returned")) {
-                        vehicle.status = (nextStatus);
+                if (vehicle.getSerialNumber().equals(serialNumber)) {
+                    if (vehicle.getStatus().equals("returned")) {
+                        vehicle.setStatus(nextStatus);
                         vehicleDAO.save(vehicle);
                         return true;
                     }
@@ -132,11 +132,12 @@ public class VehicleService {
                           @RequestParam(name = "type") String type,
                           @RequestParam(name = "serialNumber") String serialNumber) {
         Vehicle v = new Vehicle();
-        v.status = "open";
-        v.price = price;
-        v.title = title;
-        v.type = type;
-        v.serialNumber = (serialNumber);
+        v.setStatus("open");
+        v.setPrice(price);
+        v.setTitle(title);
+        v.setType(type);
+        v.setSerialNumber(serialNumber);
+
         return vehicleDAO.save(v);
     }
 }

@@ -27,7 +27,9 @@ public class CustomerService {
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
     public @ResponseBody
     List<Customer> getAll() {
-        return StreamSupport.stream(customerDAO.findAll().spliterator(), false).filter(e -> !e.status.equals("delete")).collect(Collectors.toList());
+        return customerDAO.findAll().stream()
+                .filter(e -> !"delete".equals(e.getStatus()))
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/customer/freeze", method = RequestMethod.POST)
@@ -35,8 +37,8 @@ public class CustomerService {
     Customer freeze(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
         Iterable<Customer> cs = customerDAO.findAll();
         for (Customer c : cs) {
-            if (c.login.equals(login) && c.email.equals(email)) {
-                c.status = ("freeze");
+            if (c.getLogin().equals(login) && c.getEmail().equals(email)) {
+                c.setStatus("freeze");
                 return customerDAO.save(c);
             }
         }
@@ -48,8 +50,8 @@ public class CustomerService {
     Customer delete(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
         Iterable<Customer> customers = customerDAO.findAll();
         for (Customer customer : customers) {
-            if (customer.login.equals(login) && customer.email.equals(email)) {
-                customer.status = ("delete");
+            if (customer.getLogin().equals(login) && customer.getEmail().equals(email)) {
+                customer.setStatus("delete");
                 return customerDAO.save(customer);
             }
         }
@@ -61,8 +63,8 @@ public class CustomerService {
     Customer active(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
         Iterable<Customer> cs = customerDAO.findAll();
         for (Customer c : cs) {
-            if (c.login.equals(login) && c.email.equals(email)) {
-                c.status = ("active");
+            if (c.getLogin().equals(login) && c.getEmail().equals(email)) {
+                c.setStatus("active");
                 return customerDAO.save(c);
             }
         }
@@ -77,35 +79,38 @@ public class CustomerService {
                 .setParameter("email", email)
                 .setParameter("login", login)
                 .getSingleResult()
-                .billingAccounts;
+                .getBillingAccounts();
     }
 
     @RequestMapping(value = "/customer/create", method = RequestMethod.POST)
     public @ResponseBody
     Customer create(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
+        EntityTransaction tx = entityManager.getTransaction();
+        tx.begin();
         Iterable<Customer> customers = customerDAO.findAll();
         for (Customer customer : customers) {
-            if (customer.login.equals(login) || customer.email.equals(email)) {
+            if (customer.getLogin().equals(login) || customer.getEmail().equals(email)) {
                 throw new RuntimeException("Create customer error");
             }
         }
-        Customer c = new Customer();
-        c.email = (email);
-        c.login = (login);
-        c.category = ("default");
-        c.registration = (Instant.now());
-        c.status = ("active");
-        c = entityManager.merge(c);
-        BillingAccount b = new BillingAccount();
-        b.customer = c;
-        b.createdDate = Instant.now();
-        b.isPrimary = true;
-        b.money = 0;
-        b = entityManager.merge(b);
-        transaction.commit();
-        return entityManager.find(Customer.class, b.customer.id);
+        Customer customer = new Customer();
+
+        customer.setEmail(email);
+        customer.setLogin(login);
+        customer.setCategory("default");
+        customer.setRegistration(Instant.now());
+        customer.setStatus("active");
+        customer = entityManager.merge(customer);
+
+        BillingAccount billingAccount = new BillingAccount();
+        billingAccount.setCustomer(customer);
+        billingAccount.setCreatedDate(Instant.now());
+        billingAccount.setPrimary(true);
+//        billingAccount.setMoney(0);
+        billingAccount = entityManager.merge(billingAccount);
+
+        tx.commit();
+        return entityManager.find(Customer.class, billingAccount.getCustomer().getId());
     }
 }
