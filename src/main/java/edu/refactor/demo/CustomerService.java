@@ -1,5 +1,6 @@
 package edu.refactor.demo;
 
+import edu.refactor.demo.dao.CustomerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.stream.StreamSupport;
 
 @RestController
 public class CustomerService {
-    private final CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
 
     private EntityManagerFactory entityManagerFactory;
 

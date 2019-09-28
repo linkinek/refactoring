@@ -1,5 +1,6 @@
 package edu.refactor.demo;
 
+import edu.refactor.demo.dao.CustomerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
