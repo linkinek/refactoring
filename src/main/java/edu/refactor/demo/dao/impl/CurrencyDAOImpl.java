@@ -1,8 +1,8 @@
 package edu.refactor.demo.dao.impl;
 
-import edu.refactor.demo.currency.Currency;
-import edu.refactor.demo.currency.soup.model.ValCurs;
-import edu.refactor.demo.currency.soup.model.Valute;
+import edu.refactor.demo.entity.currency.Currency;
+import edu.refactor.demo.entity.currency.soup.model.ValCurs;
+import edu.refactor.demo.entity.currency.soup.model.Valute;
 import edu.refactor.demo.dao.CurrencyDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

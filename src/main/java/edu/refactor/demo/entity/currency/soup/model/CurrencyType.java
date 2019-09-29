@@ -1,4 +1,4 @@
-package edu.refactor.demo.currency.soup.model;
+package edu.refactor.demo.entity.currency.soup.model;
 
 public enum CurrencyType {
     RUB, AUD, AZN, GBP, AMD, BYN, BGN, BRL, HUF, HKD, DKK,

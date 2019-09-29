@@ -1,7 +1,6 @@
-package edu.refactor.demo;
+package edu.refactor.demo.entity;
 
-import edu.refactor.demo.currency.Currency;
-import edu.refactor.demo.currency.soup.model.CurrencyType;
+import edu.refactor.demo.entity.currency.Currency;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -32,15 +29,12 @@ public class BillingAccount implements Serializable {
     @JoinColumn(name = "currency_id")
     private Currency currency;
 
-    @Column
-    private boolean isPrimary;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billing_account_id")
     private Customer customer;
 
     @Column
-    private Instant createdDate;
+    private Instant creationDate;
 
     public Long getId() {
         return id;
@@ -66,14 +60,6 @@ public class BillingAccount implements Serializable {
         this.currency = currency;
     }
 
-    public boolean isPrimary() {
-        return isPrimary;
-    }
-
-    public void setPrimary(boolean primary) {
-        isPrimary = primary;
-    }
-
     public Customer getCustomer() {
         return customer;
     }
@@ -82,11 +68,11 @@ public class BillingAccount implements Serializable {
         this.customer = customer;
     }
 
-    public Instant getCreatedDate() {
-        return createdDate;
+    public Instant getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
     }
 }

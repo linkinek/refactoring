@@ -1,6 +1,6 @@
-package edu.refactor.demo.currency;
+package edu.refactor.demo.entity.currency;
 
-import edu.refactor.demo.currency.soup.model.CurrencyType;
+import edu.refactor.demo.entity.currency.soup.model.CurrencyType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

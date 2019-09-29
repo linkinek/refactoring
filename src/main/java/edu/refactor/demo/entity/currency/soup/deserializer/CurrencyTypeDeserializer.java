@@ -1,10 +1,10 @@
-package edu.refactor.demo.currency.soup.deserializer;
+package edu.refactor.demo.entity.currency.soup.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import edu.refactor.demo.currency.soup.model.CurrencyType;
+import edu.refactor.demo.entity.currency.soup.model.CurrencyType;
 
 import java.io.IOException;
 

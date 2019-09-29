@@ -1,6 +1,8 @@
-package edu.refactor.demo;
+package edu.refactor.demo.service;
 
 import edu.refactor.demo.dao.CustomerDAO;
+import edu.refactor.demo.entity.BillingAccount;
+import edu.refactor.demo.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +12,6 @@ import javax.persistence.EntityTransaction;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RestController
 public class CustomerService {
@@ -105,9 +106,7 @@ public class CustomerService {
 
         BillingAccount billingAccount = new BillingAccount();
         billingAccount.setCustomer(customer);
-        billingAccount.setCreatedDate(Instant.now());
-        billingAccount.setPrimary(true);
-//        billingAccount.setMoney(0);
+        billingAccount.setCreationDate(Instant.now());
         billingAccount = entityManager.merge(billingAccount);
 
         tx.commit();

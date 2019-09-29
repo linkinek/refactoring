@@ -1,7 +1,8 @@
-package edu.refactor.demo;
+package edu.refactor.demo.shedule;
 
+import edu.refactor.demo.dao.VehicleRentalDAO;
+import edu.refactor.demo.entity.VehicleRental;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -22,7 +23,7 @@ public class ScheduledTasks {
         for (VehicleRental vr : vrs) {
             String status = vr.getStatus();
             if ("active".equals(status)) {
-                Instant i = vr.getStartRent();
+                Instant i = vr.getStartDate();
                 long j = Duration.between(i, Instant.now()).getSeconds();
                 if ("default".equals(vr.getCustomer().getStatus())) {
                     if (j > 86400) {

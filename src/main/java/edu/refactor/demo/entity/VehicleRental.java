@@ -1,4 +1,4 @@
-package edu.refactor.demo;
+package edu.refactor.demo.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,10 +22,10 @@ public class VehicleRental implements Serializable {
     private Customer customer;
 
     @Column
-    private Instant startRent;
+    private Instant startDate;
 
     @Column
-    private Instant endRent;
+    private Instant endDate;
 
     @Column
     private String status;
@@ -54,20 +54,20 @@ public class VehicleRental implements Serializable {
         this.customer = customer;
     }
 
-    public Instant getStartRent() {
-        return startRent;
+    public Instant getStartDate() {
+        return startDate;
     }
 
-    public void setStartRent(Instant startRent) {
-        this.startRent = startRent;
+    public void setStartDate(Instant startDate) {
+        this.startDate = startDate;
     }
 
-    public Instant getEndRent() {
-        return endRent;
+    public Instant getEndDate() {
+        return endDate;
     }
 
-    public void setEndRent(Instant endRent) {
-        this.endRent = endRent;
+    public void setEndDate(Instant endDate) {
+        this.endDate = endDate;
     }
 
     public String getStatus() {

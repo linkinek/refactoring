@@ -1,4 +1,4 @@
-package edu.refactor.demo;
+package edu.refactor.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

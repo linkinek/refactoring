@@ -1,11 +1,18 @@
-package edu.refactor.demo;
+package edu.refactor.demo.service;
 
+import edu.refactor.demo.entity.Vehicle;
+import edu.refactor.demo.dao.VehicleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class VehicleService {
-    private final VehicleDAO vehicleDAO;
+    private VehicleDAO vehicleDAO;
 
     @Autowired
     public VehicleService(VehicleDAO vehicleDAO) {
@@ -13,14 +20,13 @@ public class VehicleService {
     }
 
     @RequestMapping(value = "/vehicle", method = RequestMethod.GET)
-    public @ResponseBody
-    Iterable<Vehicle> all() {
+    public List<Vehicle> all() {
         return vehicleDAO.findAll();
     }
 
     @RequestMapping(value = "/vehicle/status/update", method = RequestMethod.POST)
-    public @ResponseBody
-    boolean statusUpdate(@RequestParam(name = "serialNumber") String serialNumber, @RequestParam(name = "status") String nextStatus) {
+    public boolean statusUpdate(@RequestParam(name = "serialNumber") String serialNumber,
+                                @RequestParam(name = "status") String nextStatus) {
         if (nextStatus.equals("delete")) {
             for (Vehicle vehicle : vehicleDAO.findAll()) {
                 if (vehicle.getSerialNumber().equals(serialNumber)) {
@@ -126,11 +132,10 @@ public class VehicleService {
     }
 
     @RequestMapping(value = "/vehicle/create", method = RequestMethod.POST)
-    public @ResponseBody
-    Vehicle createVehicle(@RequestParam(name = "title") String title,
-                          @RequestParam(name = "price") double price,
-                          @RequestParam(name = "type") String type,
-                          @RequestParam(name = "serialNumber") String serialNumber) {
+    public Vehicle createVehicle(@RequestParam(name = "title") String title,
+                                 @RequestParam(name = "price") double price,
+                                 @RequestParam(name = "type") String type,
+                                 @RequestParam(name = "serialNumber") String serialNumber) {
         Vehicle v = new Vehicle();
         v.setStatus("open");
         v.setPrice(price);

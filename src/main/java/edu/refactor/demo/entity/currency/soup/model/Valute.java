@@ -1,10 +1,10 @@
-package edu.refactor.demo.currency.soup.model;
+package edu.refactor.demo.entity.currency.soup.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import edu.refactor.demo.currency.soup.deserializer.BigDecimalDeserializer;
-import edu.refactor.demo.currency.soup.deserializer.CurrencyTypeDeserializer;
-import edu.refactor.demo.currency.soup.deserializer.IntegerDeserializer;
+import edu.refactor.demo.entity.currency.soup.deserializer.BigDecimalDeserializer;
+import edu.refactor.demo.entity.currency.soup.deserializer.CurrencyTypeDeserializer;
+import edu.refactor.demo.entity.currency.soup.deserializer.IntegerDeserializer;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

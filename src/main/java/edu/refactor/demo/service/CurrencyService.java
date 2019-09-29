@@ -1,7 +1,7 @@
 package edu.refactor.demo.service;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import edu.refactor.demo.currency.soup.model.ValCurs;
+import edu.refactor.demo.entity.currency.soup.model.ValCurs;
 import edu.refactor.demo.dao.CurrencyDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,12 @@ public class CurrencyService {
     public static final String VAL_CURS_FROM_CBR_URL = "http://www.cbr.ru/scripts/XML_daily_eng.asp";
 
     private CurrencyDAO currencyDAO;
+    private XmlMapper xmlMapper;
 
     @Autowired
-    public CurrencyService(CurrencyDAO currencyDAO) {
+    public CurrencyService(CurrencyDAO currencyDAO, XmlMapper xmlMapper) {
         this.currencyDAO = currencyDAO;
+        this.xmlMapper = xmlMapper;
     }
 
     public void loadCurrenciesFromCbr(){
@@ -41,7 +43,7 @@ public class CurrencyService {
     @Nullable
     private ValCurs parseXmlResponse(ResponseEntity<String> response) {
         try {
-            return new XmlMapper().readValue(response.getBody(), ValCurs.class);
+            return xmlMapper.readValue(response.getBody(), ValCurs.class);
         }catch (Exception e) {
             logger.debug("Error parsing CBR xml response", e);
         }

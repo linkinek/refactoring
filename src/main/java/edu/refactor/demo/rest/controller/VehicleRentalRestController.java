@@ -1,6 +1,16 @@
-package edu.refactor.demo;
+package edu.refactor.demo.rest.controller;
 
+import edu.refactor.demo.entity.BillingAccount;
+import edu.refactor.demo.entity.Customer;
+import edu.refactor.demo.entity.Vehicle;
+import edu.refactor.demo.dao.VehicleDAO;
+import edu.refactor.demo.entity.VehicleRental;
+import edu.refactor.demo.dao.VehicleRentalDAO;
+import edu.refactor.demo.dao.BillingAccountDAO;
 import edu.refactor.demo.dao.CustomerDAO;
+import edu.refactor.demo.exception.CustomerNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,34 +19,39 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class VehicleRentalService {
-    private final CustomerDAO customerDAO;
-    private final VehicleRentalDAO vehicleRentalDao;
-    private final VehicleDAO vehicleDAO;
-    private final BillingAccountDAO billingAccountDAO;
+@RequestMapping(value = "/vehicle-rental")
+public class VehicleRentalRestController {
+    private static final Logger logger = LoggerFactory.getLogger(VehicleRentalRestController.class);
+
+    private CustomerDAO customerDAO;
+
+    private VehicleRentalDAO vehicleRentalDao;
+
+    private VehicleDAO vehicleDAO;
+
+    private BillingAccountDAO billingAccountDAO;
 
     @Autowired
-    public VehicleRentalService(CustomerDAO customerDAO, VehicleRentalDAO vehicleRentalDao, VehicleDAO vehicleDAO, BillingAccountDAO billingAccountDAO) {
+    public VehicleRentalRestController(CustomerDAO customerDAO, VehicleRentalDAO vehicleRentalDao,
+                                       VehicleDAO vehicleDAO, BillingAccountDAO billingAccountDAO) {
         this.customerDAO = customerDAO;
         this.vehicleRentalDao = vehicleRentalDao;
         this.vehicleDAO = vehicleDAO;
         this.billingAccountDAO = billingAccountDAO;
     }
 
-    @RequestMapping(value = "/rental", method = RequestMethod.GET)
-    public @ResponseBody
-    Iterable<VehicleRental> all() {
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public List<VehicleRental> getVehicleRentals() {
         return vehicleRentalDao.findAll();
     }
 
     @RequestMapping(value = "/rental/complete", method = RequestMethod.POST)
-    public @ResponseBody
-    VehicleRental completeVehicle(@RequestParam(name = "rental") Long rentalId) {
+    public VehicleRental completeVehicle(@RequestParam(name = "rental") Long rentalId) {
         Optional<VehicleRental> ro = vehicleRentalDao.findById(rentalId);
         if (ro.isPresent()) {
             VehicleRental vr = ro.get();
             if (vr.getStatus().equals("active")) {
-                vr.setEndRent(Instant.now());
+                vr.setEndDate(Instant.now());
                 vr.setStatus("completed");
                 List<BillingAccount> bs = vr.getCustomer().getBillingAccounts();
                 double value = vr.getVehicle().getPrice();
@@ -67,7 +82,7 @@ public class VehicleRentalService {
         if (rental.isPresent()) {
             VehicleRental vehicleRental = rental.get();
             if (vehicleRental.getStatus().equals("created") || vehicleRental.getStatus().equals("expired")) {
-                vehicleRental.setEndRent(Instant.now());
+                vehicleRental.setEndDate(Instant.now());
                 vehicleRental.setStatus("active");
                 return vehicleRentalDao.save(vehicleRental);
             }
@@ -82,7 +97,7 @@ public class VehicleRentalService {
         if (rental.isPresent()) {
             VehicleRental vehicleRental = rental.get();
             if (vehicleRental.getStatus().equals("active")) {
-                vehicleRental.setEndRent(Instant.now());
+                vehicleRental.setEndDate(Instant.now());
                 vehicleRental.setStatus("expired");
                 return vehicleRentalDao.save(vehicleRental);
             }
@@ -90,17 +105,26 @@ public class VehicleRentalService {
         return null;
     }
 
-    @RequestMapping(value = "/rental/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/request", method = RequestMethod.POST)
     public @ResponseBody
-    VehicleRental createVehicle(@RequestParam(name = "vehicle") Long vehicleId, @RequestParam(name = "customer") Long customerId) {
-        Optional<Customer> customer = customerDAO.findById(customerId);
+    VehicleRental requestForVehicleRent(@RequestParam(name = "vehicleId") Long vehicleId,
+                                        @RequestParam(name = "customerId") Long customerId) {
+
+        Optional<Customer> customerOpt = customerDAO.findById(customerId);
+
+        if(!customerOpt.isPresent()){
+            throw new CustomerNotFoundException(
+                    String.format("Customer[%s] not found", customerId));
+        }
+
+
         Optional<Vehicle> vehicle = vehicleDAO.findById(vehicleId);
-        if (customer.isPresent() && vehicle.isPresent()) {
+        if (customerOpt.isPresent() && vehicle.isPresent()) {
             VehicleRental vehicleRental = new VehicleRental();
             vehicleRental.setStatus("created");
-            vehicleRental.setCustomer(customer.get());
+            vehicleRental.setCustomer(customerOpt.get());
             vehicleRental.setVehicle(vehicle.get());
-            vehicleRental.setStartRent(Instant.now());
+            vehicleRental.setStartDate(Instant.now());
             return vehicleRentalDao.save(vehicleRental);
         }
         return null;

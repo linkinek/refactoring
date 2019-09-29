@@ -1,4 +1,4 @@
-package edu.refactor.demo.currency.soup.model;
+package edu.refactor.demo.entity.currency.soup.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;

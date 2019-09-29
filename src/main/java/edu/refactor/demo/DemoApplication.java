@@ -1,5 +1,6 @@
 package edu.refactor.demo;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,20 +17,15 @@ public class DemoApplication {
 
     public static void main(String[] args) throws IOException {
         SpringApplication.run(DemoApplication.class, args);
-
-//        ResponseEntity<String> responseEntity = new RestTemplate()
-//                .getForEntity(VAL_CURS_FROM_CBR_URL, String.class);
-//
-//        String body = responseEntity.getBody();
-//
-//        XmlMapper xmlMapper = new XmlMapper();
-//        ValCurs valCurs = xmlMapper.readValue(body, ValCurs.class);
-//
-//        Date date = valCurs.getDate();
     }
 
     @Bean
     public JpaTransactionManager transactionManager() {
         return new JpaTransactionManager();
+    }
+
+    @Bean(name = "xmlMapper")
+    public XmlMapper xmlMapper(){
+        return new XmlMapper();
     }
 }

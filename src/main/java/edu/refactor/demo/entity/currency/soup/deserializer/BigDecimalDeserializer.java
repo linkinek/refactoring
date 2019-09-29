@@ -1,4 +1,4 @@
-package edu.refactor.demo.currency.soup.deserializer;
+package edu.refactor.demo.entity.currency.soup.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
