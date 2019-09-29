@@ -1,5 +1,8 @@
 package edu.refactor.demo.entity;
 
+import edu.refactor.demo.entity.status.RentStatusEnum;
+import edu.refactor.demo.entity.status.VehicleStatusEnum;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -27,7 +30,7 @@ public class VehicleRental implements Serializable {
     @Column
     private Instant endDate;
 
-    @Column
+    @Column(name = "STATUS")
     private String status;
 
     public Long getId() {
@@ -70,11 +73,11 @@ public class VehicleRental implements Serializable {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
-        return status;
+    public RentStatusEnum getStatus() {
+        return status == null ? null : RentStatusEnum.fromId(status);
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(RentStatusEnum status) {
+        this.status = status == null ? null : status.getId();
     }
 }

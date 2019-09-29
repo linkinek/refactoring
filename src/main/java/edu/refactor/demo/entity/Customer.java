@@ -1,6 +1,8 @@
 package edu.refactor.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.refactor.demo.entity.status.CustomerStatusEnum;
+import edu.refactor.demo.entity.status.RentStatusEnum;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +29,7 @@ public class Customer implements Serializable {
     @Column
     private Instant registration;
 
-    @Column
+    @Column(name = "STATUS")
     private String status;
 
     @Id
@@ -70,12 +72,12 @@ public class Customer implements Serializable {
         this.registration = registration;
     }
 
-    public String getStatus() {
-        return status;
+    public CustomerStatusEnum getStatus() {
+        return status == null ? null : CustomerStatusEnum.fromId(status);
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(CustomerStatusEnum status) {
+        this.status = status == null ? null : status.getId();
     }
 
     public Long getId() {

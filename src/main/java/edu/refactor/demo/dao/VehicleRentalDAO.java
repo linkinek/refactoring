@@ -1,6 +1,7 @@
 package edu.refactor.demo.dao;
 
 import edu.refactor.demo.entity.VehicleRental;
+import edu.refactor.demo.entity.status.RentStatusEnum;
 
 import java.util.Date;
 import java.util.List;
@@ -18,4 +19,6 @@ public interface VehicleRentalDAO {
     Optional<VehicleRental> findActiveRent(Long vehicleId, Date startDate, Date endDate);
 
     Optional<VehicleRental> findActiveById(Long vehicleRentId);
+
+    List<VehicleRental> findVehicleRentalByStatus(RentStatusEnum status);
 }

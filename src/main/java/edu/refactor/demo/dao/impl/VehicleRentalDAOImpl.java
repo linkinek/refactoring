@@ -2,6 +2,7 @@ package edu.refactor.demo.dao.impl;
 
 import edu.refactor.demo.dao.VehicleRentalDAO;
 import edu.refactor.demo.entity.VehicleRental;
+import edu.refactor.demo.entity.status.RentStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -54,5 +55,14 @@ public class VehicleRentalDAOImpl implements VehicleRentalDAO {
     @Override //TODO
     public Optional<VehicleRental> findActiveById(Long vehicleRentId) {
         return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public List<VehicleRental> findVehicleRentalByStatus(RentStatusEnum status) {
+        return em.createQuery("select vr from VehicleRental vr where " +
+                "vr.status = :status order by vr.id", VehicleRental.class)
+                .setParameter("status", status.getId())
+                .getResultList();
     }
 }

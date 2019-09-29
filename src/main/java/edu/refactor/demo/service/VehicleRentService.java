@@ -6,14 +6,19 @@ import edu.refactor.demo.dao.VehicleRentalDAO;
 import edu.refactor.demo.entity.Customer;
 import edu.refactor.demo.entity.Vehicle;
 import edu.refactor.demo.entity.VehicleRental;
+import edu.refactor.demo.entity.status.CustomerStatusEnum;
+import edu.refactor.demo.entity.status.RentStatusEnum;
 import edu.refactor.demo.exception.CustomerNotFoundException;
 import edu.refactor.demo.exception.VehicleAlreadyTakenException;
-import edu.refactor.demo.exception.VehicleNotFoundException;
 import edu.refactor.demo.rest.dto.request.RequestVehicleRent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,12 +52,7 @@ public class VehicleRentService {
                     String.format("Customer[%d] not found", customerId));
         }
 
-        Optional<Vehicle> vehicleOpt = vehicleDAO.findById(vehicleId);
-
-        if (!vehicleOpt.isPresent()) {
-            throw new VehicleNotFoundException(
-                    String.format("Vehicle[%d] not found", vehicleId));
-        }
+        Vehicle vehicleOpt = vehicleDAO.findByIdNN(vehicleId);
 
         Date startDate = requestRent.getStartDate();
         Date endDate = requestRent.getEndDate();
@@ -69,14 +69,32 @@ public class VehicleRentService {
 
         VehicleRental rental = new VehicleRental();
 
-        rental.setStatus("created");
+        rental.setStatus(RentStatusEnum.CREATED);
         rental.setCustomer(customerOpt.get());
-        rental.setVehicle(vehicleOpt.get());
+        rental.setVehicle(vehicleOpt);
         rental.setStartDate(requestRent.getStartDate().toInstant());
         rental.setEndDate(requestRent.getEndDate().toInstant());
 
         VehicleRental rentalSaved = vehicleRentalDAO.save(rental);
 
         return rentalSaved;
+    }
+
+    @Transactional
+    public void updateRentalStatus(){
+        List<VehicleRental> vehicleRentals = vehicleRentalDAO
+                .findVehicleRentalByStatus(RentStatusEnum.ACTIVE);
+        for (VehicleRental vehicleRental : vehicleRentals) {
+            Instant i = vehicleRental.getStartDate();
+            long j = Duration.between(i, Instant.now()).getSeconds();
+
+            CustomerStatusEnum customerStatus = vehicleRental.getCustomer().getStatus();
+
+            if(j > customerStatus.getTimeOut()){
+                vehicleRental.setStatus(RentStatusEnum.EXPIRED);
+                vehicleRentalDAO.save(vehicleRental);
+            }
+        }
+
     }
 }

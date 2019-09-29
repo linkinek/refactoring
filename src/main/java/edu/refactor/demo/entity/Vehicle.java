@@ -1,6 +1,7 @@
 package edu.refactor.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.refactor.demo.entity.status.VehicleStatusEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public class Vehicle implements Serializable {
     @Column
     private BigDecimal price;
 
-    @Column
+    @Column(name = "STATUS")
     private String status;
 
     @Column
@@ -60,12 +61,12 @@ public class Vehicle implements Serializable {
         this.price = price;
     }
 
-    public String getStatus() {
-        return status;
+    public VehicleStatusEnum getStatus() {
+        return status == null ? null : VehicleStatusEnum.fromId(status);
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(VehicleStatusEnum rentStatus) {
+        this.status = rentStatus == null ? null : rentStatus.getId();
     }
 
     public String getType() {
