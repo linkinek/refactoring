@@ -1,8 +1,21 @@
 package edu.refactor.demo.dao;
 
 import edu.refactor.demo.entity.VehicleRental;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface VehicleRentalDAO extends GenericCrudRepository<VehicleRental> {
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+public interface VehicleRentalDAO {
+    List<VehicleRental> findAll();
+
+    Optional<VehicleRental> findById(Long id);
+
+    VehicleRental save(VehicleRental rental);
+
+    void saveAll(Iterable<VehicleRental> vrs);
+
+    Optional<VehicleRental> findActiveRent(Long vehicleId, Date startDate, Date endDate);
+
+    Optional<VehicleRental> findActiveById(Long vehicleRentId);
 }

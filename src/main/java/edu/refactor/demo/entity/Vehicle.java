@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class Vehicle implements Serializable {
     private String title;
 
     @Column
-    private double price;
+    private BigDecimal price;
 
     @Column
     private String status;
@@ -51,11 +52,11 @@ public class Vehicle implements Serializable {
         this.title = title;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

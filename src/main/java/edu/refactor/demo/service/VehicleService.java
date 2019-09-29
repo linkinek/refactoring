@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -133,7 +134,7 @@ public class VehicleService {
 
     @RequestMapping(value = "/vehicle/create", method = RequestMethod.POST)
     public Vehicle createVehicle(@RequestParam(name = "title") String title,
-                                 @RequestParam(name = "price") double price,
+                                 @RequestParam(name = "price") BigDecimal price,
                                  @RequestParam(name = "type") String type,
                                  @RequestParam(name = "serialNumber") String serialNumber) {
         Vehicle v = new Vehicle();
