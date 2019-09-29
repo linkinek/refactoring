@@ -1,6 +1,6 @@
 package edu.refactor.demo.dao;
 
-import edu.refactor.demo.Customer;
+import edu.refactor.demo.entity.Customer;
 import org.springframework.stereotype.Repository;
 
 @Repository
