@@ -5,6 +5,9 @@ import org.springframework.lang.Nullable;
 public enum  CustomerStatusEnum implements EnumClass<String>, TimeOut {
 
     DEFAULT("default", 86400),
+    ACTIVE("active", 86400),
+    FREEZE("freeze", 0),
+    DELETE("delete", 0),
     VIP("vip", 259200);
 
     protected String id;
