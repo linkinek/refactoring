@@ -1,23 +1,25 @@
 package edu.refactor.demo.entity.status;
 
 import org.springframework.lang.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import org.assertj.core.util.Lists;
 
 public enum VehicleStatusEnum implements EnumClass<String>, CurrentState<VehicleStatusEnum> {
 
-    DELETE("delete", Lists.newArrayList()),
-    OPEN("open", Lists.newArrayList(VehicleStatusEnum.DELETE, VehicleStatusEnum.RESERVED)),
-    SERVICE("service", Lists.newArrayList(VehicleStatusEnum.OPEN)),
-    RESERVED("reserved", Lists.newArrayList(VehicleStatusEnum.LEASED)),
-    LEASED("leased", Lists.newArrayList(VehicleStatusEnum.LOST, VehicleStatusEnum.RETURNED)),
-    LOST("lost", Lists.newArrayList()),
-    RETURNED("returned", Lists.newArrayList(VehicleStatusEnum.SERVICE, VehicleStatusEnum.OPEN));
+    DELETE("delete", new ArrayList<>()),
+    OPEN("open", Arrays.asList(VehicleStatusEnum.DELETE, VehicleStatusEnum.RESERVED)),
+    SERVICE("service", Arrays.asList(VehicleStatusEnum.OPEN)),
+    RESERVED("reserved", Arrays.asList(VehicleStatusEnum.LEASED)),
+    LEASED("leased", Arrays.asList(VehicleStatusEnum.LOST, VehicleStatusEnum.RETURNED)),
+    LOST("lost", new ArrayList<>()),
+    RETURNED("returned", Arrays.asList(VehicleStatusEnum.SERVICE, VehicleStatusEnum.OPEN));
 
     protected String id;
     protected List<VehicleStatusEnum> currentStatuses;
 
-    VehicleStatusEnum(String value, List<VehicleStatusEnum>  currentStatuses) {
+    VehicleStatusEnum(String value, List<VehicleStatusEnum> currentStatuses) {
         this.id = value;
         this.currentStatuses = currentStatuses;
     }
@@ -38,7 +40,7 @@ public enum VehicleStatusEnum implements EnumClass<String>, CurrentState<Vehicle
     }
 
     @Override
-    public List<VehicleStatusEnum> getCurrentStatuses(){
+    public List<VehicleStatusEnum> getCurrentStatuses() {
         return currentStatuses;
     }
 
