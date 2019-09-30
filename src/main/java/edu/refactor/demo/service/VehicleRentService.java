@@ -37,7 +37,7 @@ public class VehicleRentService {
         this.customerDAO = customerDAO;
     }
 
-    public Long rentVehicle(RequestVehicleRent requestRent){
+    public VehicleRental createVehicleRental(RequestVehicleRent requestRent){
         Long customerId = requestRent.getCustomerId();
         Long vehicleId = requestRent.getVehicleId();
 
@@ -69,7 +69,7 @@ public class VehicleRentService {
 
         VehicleRental rentalSaved = vehicleRentalDAO.save(rental);
 
-        return rentalSaved.getId();
+        return rentalSaved;
     }
 
     public void updateRentalStatus(){

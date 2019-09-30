@@ -1,5 +1,7 @@
 package edu.refactor.demo.rest.dto.response;
 
+import edu.refactor.demo.entity.status.RentStatusEnum;
+
 import java.io.Serializable;
 
 public class ResponseVehicleRent implements Serializable {
@@ -7,12 +9,12 @@ public class ResponseVehicleRent implements Serializable {
 
     private Long vehicleRentalId;
 
-    private String status;
+    private RentStatusEnum status;
 
     public ResponseVehicleRent() {
     }
 
-    public ResponseVehicleRent(Long vehicleRentalId, String status) {
+    public ResponseVehicleRent(Long vehicleRentalId, RentStatusEnum status) {
         this.vehicleRentalId = vehicleRentalId;
         this.status = status;
     }
@@ -25,11 +27,11 @@ public class ResponseVehicleRent implements Serializable {
         this.vehicleRentalId = vehicleRentalId;
     }
 
-    public String getStatus() {
+    public RentStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RentStatusEnum status) {
         this.status = status;
     }
 }
