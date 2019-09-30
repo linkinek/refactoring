@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,22 +25,19 @@ public class VehicleRentService {
 
     private CustomerDAO customerDAO;
 
-    private BillingService billingService;
-
     private VehicleRentalDAO vehicleRentalDAO;
 
     private VehicleDAO vehicleDAO;
 
     @Autowired
-    public VehicleRentService(BillingService billingService, VehicleDAO vehicleDAO,
-                              VehicleRentalDAO vehicleRentalDAO, CustomerDAO customerDAO) {
-        this.billingService = billingService;
+    public VehicleRentService(VehicleDAO vehicleDAO, VehicleRentalDAO vehicleRentalDAO,
+                              CustomerDAO customerDAO) {
         this.vehicleDAO = vehicleDAO;
         this.vehicleRentalDAO = vehicleRentalDAO;
         this.customerDAO = customerDAO;
     }
 
-    public VehicleRental rentVehicle(RequestVehicleRent requestRent){
+    public Long rentVehicle(RequestVehicleRent requestRent){
         Long customerId = requestRent.getCustomerId();
         Long vehicleId = requestRent.getVehicleId();
 
@@ -54,11 +50,8 @@ public class VehicleRentService {
 
         Vehicle vehicleOpt = vehicleDAO.findByIdNN(vehicleId);
 
-        Date startDate = requestRent.getStartDate();
-        Date endDate = requestRent.getEndDate();
-
         Optional<VehicleRental> activeRentOpt = vehicleRentalDAO
-                .findActiveRent(vehicleId, startDate, endDate);
+                .findActiveRent(vehicleId);
 
         if(activeRentOpt.isPresent()){
             throw new VehicleAlreadyTakenException(
@@ -73,11 +66,10 @@ public class VehicleRentService {
         rental.setCustomer(customerOpt.get());
         rental.setVehicle(vehicleOpt);
         rental.setStartDate(requestRent.getStartDate().toInstant());
-        rental.setEndDate(requestRent.getEndDate().toInstant());
 
         VehicleRental rentalSaved = vehicleRentalDAO.save(rental);
 
-        return rentalSaved;
+        return rentalSaved.getId();
     }
 
     public void updateRentalStatus(){

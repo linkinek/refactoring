@@ -9,7 +9,8 @@ public enum RentStatusEnum implements EnumClass<String>, CurrentState<RentStatus
 
     CREATED("created", Lists.newArrayList()),
     EXPIRED("expired", Lists.newArrayList(RentStatusEnum.ACTIVE)),
-    ACTIVE("active", Lists.newArrayList());
+    ACTIVE("active", Lists.newArrayList()),
+    COMPLETED("completed", Lists.newArrayList(RentStatusEnum.ACTIVE));
 
     protected String id;
     protected List<RentStatusEnum> currentStatuses;

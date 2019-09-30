@@ -2,6 +2,7 @@ package edu.refactor.demo.rest.controller;
 
 import edu.refactor.demo.dao.VehicleRentalDAO;
 import edu.refactor.demo.entity.VehicleRental;
+import edu.refactor.demo.entity.status.RentStatusEnum;
 import edu.refactor.demo.rest.dto.request.RequestVehicleRent;
 import edu.refactor.demo.rest.dto.response.ResponseVehicleRent;
 import edu.refactor.demo.service.BillingService;
@@ -52,9 +53,8 @@ public class VehicleRentalRestController {
         Optional<VehicleRental> rental = vehicleRentalDao.findById(rentalId);
         if (rental.isPresent()) {
             VehicleRental vehicleRental = rental.get();
-            if (vehicleRental.getStatus().equals("created") || vehicleRental.getStatus().equals("expired")) {
-                vehicleRental.setEndDate(Instant.now());
-                vehicleRental.setStatus("active");
+            if (vehicleRental.getStatus() == RentStatusEnum.CREATED || vehicleRental.getStatus() == RentStatusEnum.EXPIRED) {
+                vehicleRental.setStatus(RentStatusEnum.ACTIVE);
                 return vehicleRentalDao.save(vehicleRental);
             }
         }

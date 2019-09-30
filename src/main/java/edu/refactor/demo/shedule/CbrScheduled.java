@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CbrScheduled {
     private static final Logger logger = LoggerFactory.getLogger(CbrScheduled.class);
-    public static final String UPDATE_CURRENCY_FROM_CBR_CRON = "0 0/30 * * * ?";
+    public static final String UPDATE_CURRENCY_FROM_CBR_CRON = "0/30 0 * * * ?";
 
     private CurrencyService currencyService;
 

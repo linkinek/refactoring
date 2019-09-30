@@ -7,6 +7,8 @@ import edu.refactor.demo.entity.Customer;
 import edu.refactor.demo.entity.Vehicle;
 import edu.refactor.demo.entity.VehicleRental;
 import edu.refactor.demo.entity.currency.Currency;
+import edu.refactor.demo.entity.status.CustomerStatusEnum;
+import edu.refactor.demo.entity.status.RentStatusEnum;
 import edu.refactor.demo.exception.CompleteRentException;
 import edu.refactor.demo.exception.VehicleRentalNotFoundException;
 import org.slf4j.Logger;
@@ -15,12 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
-import static java.time.temporal.ChronoField.INSTANT_SECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Service
 public class BillingService {
@@ -49,8 +50,7 @@ public class BillingService {
 
         BigDecimal rentCost = calculateCostRent(rental);
 
-        List<BillingAccount> accounts = billingAccountDAO
-                .findByCustomerId(customer.getId());
+        List<BillingAccount> accounts = billingAccountDAO.findByCustomerId(customer.getId());
 
         for (BillingAccount account : accounts) {
             BigDecimal balanceRub = convertAccountRub(account);
@@ -68,10 +68,10 @@ public class BillingService {
     private BigDecimal calculateCostRent(VehicleRental rental) {
         logger.info("Try to calculate cost rent for customer");
 
-        Instant startDate = rental.getStartDate();
-        Instant endDate = rental.getEndDate();
+        Customer customer = rental.getCustomer();
+        CustomerStatusEnum status = customer.getStatus();
 
-        long rentalDays = endDate.getLong(INSTANT_SECONDS) - startDate.getLong(INSTANT_SECONDS);
+        long rentalDays = SECONDS.toDays(status.getTimeOut());
         Vehicle vehicle = rental.getVehicle();
 
         return vehicle.getPrice().multiply(new BigDecimal(rentalDays));
@@ -100,7 +100,7 @@ public class BillingService {
         account.setBalance(availableBalance);
         billingAccountDAO.save(account);
 
-        rental.setStatus("completed");
+        rental.setStatus(RentStatusEnum.COMPLETED);
         vehicleRentalDAO.save(rental);
     }
 }

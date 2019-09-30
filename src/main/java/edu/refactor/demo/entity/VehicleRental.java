@@ -1,9 +1,13 @@
 package edu.refactor.demo.entity;
 
 import edu.refactor.demo.entity.status.RentStatusEnum;
-import edu.refactor.demo.entity.status.VehicleStatusEnum;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -26,9 +30,6 @@ public class VehicleRental implements Serializable {
 
     @Column
     private Instant startDate;
-
-    @Column
-    private Instant endDate;
 
     @Column(name = "STATUS")
     private String status;
@@ -63,14 +64,6 @@ public class VehicleRental implements Serializable {
 
     public void setStartDate(Instant startDate) {
         this.startDate = startDate;
-    }
-
-    public Instant getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Instant endDate) {
-        this.endDate = endDate;
     }
 
     public RentStatusEnum getStatus() {

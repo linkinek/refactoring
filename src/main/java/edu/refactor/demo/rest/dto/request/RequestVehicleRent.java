@@ -16,9 +16,6 @@ public class RequestVehicleRent implements Serializable {
     @NotNull
     private Date startDate;
 
-    @NotNull
-    private Date endDate;
-
     public Long getCustomerId() {
         return customerId;
     }
@@ -41,13 +38,5 @@ public class RequestVehicleRent implements Serializable {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 }
