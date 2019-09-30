@@ -80,7 +80,6 @@ public class VehicleRentService {
         return rentalSaved;
     }
 
-    @Transactional
     public void updateRentalStatus(){
         List<VehicleRental> vehicleRentals = vehicleRentalDAO
                 .findVehicleRentalByStatus(RentStatusEnum.ACTIVE);

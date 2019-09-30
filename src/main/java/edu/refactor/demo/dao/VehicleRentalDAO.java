@@ -16,7 +16,7 @@ public interface VehicleRentalDAO {
 
     void saveAll(Iterable<VehicleRental> vrs);
 
-    Optional<VehicleRental> findActiveRent(Long vehicleId, Date startDate, Date endDate);
+    Optional<VehicleRental> findActiveRent(Long vehicleId);
 
     Optional<VehicleRental> findActiveById(Long vehicleRentId);
 

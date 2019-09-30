@@ -47,14 +47,23 @@ public class VehicleRentalDAOImpl implements VehicleRentalDAO {
         rentals.forEach(this::save);
     }
 
-    @Override //TODO
-    public Optional<VehicleRental> findActiveRent(Long vehicleId, Date startDate, Date endDate) {
-        return Optional.empty();
+    @Transactional
+    @Override
+    public Optional<VehicleRental> findActiveRent(Long vehicleId) {
+        return Optional.of(em.createQuery("select vr from VehicleRental vr join vr.vehicle v where " +
+                "vr.status = :status and v.id = :vehicleId", VehicleRental.class)
+                .setParameter("status", RentStatusEnum.ACTIVE)
+                .setParameter("vehicleId", vehicleId)
+                .getSingleResult());
     }
 
-    @Override //TODO
+    @Transactional
+    @Override
     public Optional<VehicleRental> findActiveById(Long vehicleRentId) {
-        return Optional.empty();
+        return Optional.of(em.createQuery("select vr from VehicleRental vr where " +
+                "vr.id = :vehicleRentId", VehicleRental.class)
+                .setParameter("vehicleRentId", vehicleRentId.toString())
+                .getSingleResult());
     }
 
     @Transactional

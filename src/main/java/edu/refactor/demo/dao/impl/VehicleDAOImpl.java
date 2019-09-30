@@ -4,12 +4,11 @@ import edu.refactor.demo.dao.VehicleDAO;
 import edu.refactor.demo.entity.Vehicle;
 import edu.refactor.demo.entity.status.VehicleStatusEnum;
 import edu.refactor.demo.exception.VehicleNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
@@ -17,8 +16,6 @@ import java.util.List;
 
 @Repository
 public class VehicleDAOImpl implements VehicleDAO {
-
-    private static final Logger logger = LoggerFactory.getLogger(CurrencyDAOImpl.class);
 
     @PersistenceContext
     private EntityManager em;
@@ -32,13 +29,18 @@ public class VehicleDAOImpl implements VehicleDAO {
                 .getSingleResult();
     }
 
-    @Transactional
     @Nullable
     @Override
     public Vehicle findById(String id) {
-        return em.createQuery("select v from Vehicle v where v.id = :id", Vehicle.class)
+        Vehicle vehicle;
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        vehicle = em.createQuery("select v from Vehicle v where v.id = :id", Vehicle.class)
                 .setParameter("id", id)
                 .getSingleResult();
+        tx.commit();
+
+        return vehicle;
     }
 
     @Override
