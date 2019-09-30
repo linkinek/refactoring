@@ -1,6 +1,7 @@
 package edu.refactor.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.refactor.demo.entity.status.CategoryEnum;
 import edu.refactor.demo.entity.status.CustomerStatusEnum;
 import edu.refactor.demo.entity.status.RentStatusEnum;
 
@@ -96,12 +97,12 @@ public class Customer implements Serializable {
         this.rentals = rentals;
     }
 
-    public String getCategory() {
-        return category;
+    public CategoryEnum getCategory() {
+        return category == null ? null : CategoryEnum.fromId(category);
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategory(CategoryEnum category) {
+        this.category = category == null ? null : category.getId();
     }
 
     public List<BillingAccount> getBillingAccounts() {

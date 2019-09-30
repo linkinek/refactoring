@@ -3,6 +3,7 @@ package edu.refactor.demo.service;
 import edu.refactor.demo.dao.CustomerDAO;
 import edu.refactor.demo.entity.BillingAccount;
 import edu.refactor.demo.entity.Customer;
+import edu.refactor.demo.entity.status.CategoryEnum;
 import edu.refactor.demo.entity.status.CustomerStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,7 +105,7 @@ public class CustomerService {
 
         customer.setEmail(email);
         customer.setLogin(login);
-        customer.setCategory("default");
+        customer.setCategory(CategoryEnum.DEFAULT);
         customer.setRegistration(Instant.now());
         customer.setStatus(CustomerStatusEnum.ACTIVE);
         customer = entityManager.merge(customer);
