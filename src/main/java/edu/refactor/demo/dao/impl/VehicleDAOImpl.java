@@ -41,6 +41,7 @@ public class VehicleDAOImpl implements VehicleDAO {
                     .setParameter("id", id)
                     .getSingleResult();
 
+            tx.commit();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
