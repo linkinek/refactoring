@@ -87,7 +87,7 @@ public class BillingServiceTest extends AbstractDefaultServiceTest {
 
         //mock repository layer
 
-        Mockito.when(vehicleRentalDAO.findActiveById(rental.getId())).thenReturn(Optional.of(rental));
+        Mockito.when(vehicleRentalDAO.findActiveRent(rental.getId())).thenReturn(Optional.of(rental));
         Mockito.when(vehicleRentalDAO.findById(rental.getId())).thenReturn(Optional.of(rental));
         Mockito.when(billingAccountDAO.findByCustomerId(customer.getId())).thenReturn(accounts);
         Mockito.when(billingAccountDAO.findById(account.getId())).thenReturn(Optional.of(account));
