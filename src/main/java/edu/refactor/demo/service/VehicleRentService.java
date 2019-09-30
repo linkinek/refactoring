@@ -86,6 +86,5 @@ public class VehicleRentService {
                 vehicleRentalDAO.save(vehicleRental);
             }
         }
-
     }
 }

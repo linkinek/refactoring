@@ -5,88 +5,73 @@ import edu.refactor.demo.entity.BillingAccount;
 import edu.refactor.demo.entity.Customer;
 import edu.refactor.demo.entity.status.CategoryEnum;
 import edu.refactor.demo.entity.status.CustomerStatusEnum;
+import edu.refactor.demo.exception.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-@RestController
+@Service
 public class CustomerService {
     private CustomerDAO customerDAO;
 
     private EntityManagerFactory entityManagerFactory;
 
+    //TODO please add logs for all methods...
     @Autowired
     public CustomerService(CustomerDAO customerDAO, EntityManagerFactory entityManagerFactory) {
         this.customerDAO = customerDAO;
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    @RequestMapping(value = "/customer", method = RequestMethod.GET)
-    public @ResponseBody
-    List<Customer> getAll() {
-        return customerDAO.findAll().stream()
-                .filter(e -> !"delete".equals(e.getStatus()))
-                .collect(Collectors.toList());
-    }
+    public void freeze(String login, String email) {
+        Optional<Customer> customerOptional = customerDAO.findByLoginAndEmail(login, email);
 
-    @RequestMapping(value = "/customer/freeze", method = RequestMethod.POST)
-    public @ResponseBody
-    Customer freeze(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
-        Iterable<Customer> cs = customerDAO.findAll();
-        for (Customer c : cs) {
-            if (c.getLogin().equals(login) && c.getEmail().equals(email)) {
-                c.setStatus(CustomerStatusEnum.FREEZE);
-                return customerDAO.save(c);
-            }
+        if (!customerOptional.isPresent()) {
+            throw new CustomerNotFoundException();
         }
-        throw new RuntimeException("freeze error");
+
+        Customer customer = customerOptional.get();
+        customer.setStatus(CustomerStatusEnum.FREEZE);
+
+        customerDAO.save(customer);
     }
 
-    @RequestMapping(value = "/customer/delete", method = RequestMethod.POST)
-    public @ResponseBody
-    Customer delete(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
-        Iterable<Customer> customers = customerDAO.findAll();
-        for (Customer customer : customers) {
-            if (customer.getLogin().equals(login) && customer.getEmail().equals(email)) {
-                customer.setStatus(CustomerStatusEnum.DEFAULT);
-                return customerDAO.save(customer);
-            }
+    public void delete(String login, String email) {
+        Optional<Customer> customerOptional = customerDAO.findByLoginAndEmail(login, email);
+
+        if (!customerOptional.isPresent()) {
+            throw new CustomerNotFoundException();
         }
-        throw new RuntimeException("freeze error");
+
+        Customer customer = customerOptional.get();
+        customerDAO.delete(customer);
     }
 
-    @RequestMapping(value = "/customer/active", method = RequestMethod.POST)
-    public @ResponseBody
-    Customer active(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
-        Iterable<Customer> cs = customerDAO.findAll();
-        for (Customer c : cs) {
-            if (c.getLogin().equals(login) && c.getEmail().equals(email)) {
-                c.setStatus(CustomerStatusEnum.ACTIVE);
-                return customerDAO.save(c);
-            }
+    public void active(String login, String email) {
+        Optional<Customer> customerOptional = customerDAO.findByLoginAndEmail(login, email);
+
+        if (!customerOptional.isPresent()) {
+            throw new CustomerNotFoundException();
         }
-        throw new RuntimeException("active error");
+
+        Customer customer = customerOptional.get();
+        customer.setStatus(CustomerStatusEnum.ACTIVE);
+
+        customerDAO.save(customer);
     }
 
-    @RequestMapping(value = "/customer/billingAccount", method = RequestMethod.GET)
-    public @ResponseBody
-    List<BillingAccount> billingAccount(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return entityManager.createQuery("select e from Customer e JOIN FETCH e.billingAccounts where e.email = :email and e.login = :login  ", Customer.class)
-                .setParameter("email", email)
-                .setParameter("login", login)
-                .getSingleResult()
-                .getBillingAccounts();
+    public List<BillingAccount> billingAccount(String login, String email) {
+        return customerDAO.retrieveBillingAccounts(login, email);
     }
 
     @RequestMapping(value = "/customer/create", method = RequestMethod.POST)
