@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduledTasks {
     private static final Logger logger = LoggerFactory.getLogger(CbrScheduled.class);
-    public static final String UPDATE_CURRENT_TIME_CRON = "0 0 0 * * *";
+
+    public static final String UPDATE_CURRENT_RENTAL_STATUS_CRON = "0 0 0 * * *";
 
     protected VehicleRentService vehicleRentService;
 
@@ -19,7 +20,7 @@ public class ScheduledTasks {
         this.vehicleRentService = vehicleRentService;
     }
 
-    @Scheduled(cron = UPDATE_CURRENT_TIME_CRON)
+    @Scheduled(cron = UPDATE_CURRENT_RENTAL_STATUS_CRON)
     public void reportCurrentTime() {
         logger.info("Rental vehicle status updates started");
 

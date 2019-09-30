@@ -20,6 +20,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import static edu.refactor.demo.entity.status.RentStatusEnum.CREATED;
+
 @Service
 public class VehicleRentService {
 
@@ -58,18 +60,16 @@ public class VehicleRentService {
                     String.format("Vehicle[%d] is already taken", vehicleId));
         }
 
-        //TODO check available rental
-
         VehicleRental rental = new VehicleRental();
 
-        rental.setStatus(RentStatusEnum.CREATED);
+        rental.setStatus(CREATED);
         rental.setCustomer(customerOpt.get());
         rental.setVehicle(vehicleOpt);
         rental.setStartDate(requestRent.getStartDate().toInstant());
 
-        VehicleRental rentalSaved = vehicleRentalDAO.save(rental);
+        rental = vehicleRentalDAO.save(rental);
 
-        return rentalSaved;
+        return rental;
     }
 
     public void updateRentalStatus(){

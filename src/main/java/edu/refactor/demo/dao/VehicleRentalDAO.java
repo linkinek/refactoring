@@ -18,7 +18,5 @@ public interface VehicleRentalDAO {
 
     Optional<VehicleRental> findActiveRent(Long vehicleId);
 
-    Optional<VehicleRental> findActiveById(Long vehicleRentId);
-
     List<VehicleRental> findVehicleRentalByStatus(RentStatusEnum status);
 }

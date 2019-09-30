@@ -7,6 +7,7 @@ import edu.refactor.demo.exception.StatusNotFoundException;
 import edu.refactor.demo.exception.VehicleNotFoundException;
 import edu.refactor.demo.rest.dto.request.RequestVehicle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,11 +31,11 @@ public class VehicleRestController {
     }
 
     @RequestMapping(value = "/vehicle/status/update", method = RequestMethod.POST)
-    public void updateVehicleStatus(@RequestParam(name = "serialNumber") String serialNumber,
-                                    @RequestParam(name = "status") String nextStatus) {
-        VehicleStatusEnum nextStatusEnum = VehicleStatusEnum.fromId(nextStatus);
+    public ResponseEntity updateVehicleStatus(@RequestParam(name = "serialNumber") String serialNumber,
+                                              @RequestParam(name = "status") String status) {
+        VehicleStatusEnum nextStatus = VehicleStatusEnum.fromId(status);
 
-        if (nextStatusEnum == null) {
+        if (nextStatus == null) {
             throw new StatusNotFoundException();
         }
 
@@ -44,11 +45,13 @@ public class VehicleRestController {
             throw new VehicleNotFoundException("Vehicle not found by serial number");
         }
 
-        vehicleDAO.updateStatus(vehicle.getId().toString(), nextStatusEnum);
+        vehicleDAO.updateStatus(vehicle.getId().toString(), nextStatus);
+
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/vehicle/create", method = RequestMethod.POST)
-    public void createVehicle(@Valid RequestVehicle request) {
+    public ResponseEntity createVehicle(@Valid RequestVehicle request) {
         Vehicle v = new Vehicle();
 
         v.setPrice(request.getPrice());
@@ -58,5 +61,7 @@ public class VehicleRestController {
         v.setStatus(VehicleStatusEnum.OPEN);
 
         vehicleDAO.save(v);
+
+        return ResponseEntity.ok().build();
     }
 }

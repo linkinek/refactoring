@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 @Repository
 public class CurrencyDAOImpl implements CurrencyDAO {
@@ -33,8 +34,8 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 
     @Transactional
     @Override
-    public Currency findById(String id) {
-        return em.find(Currency.class, id);
+    public Optional<Currency> findById(String id) {
+        return Optional.ofNullable(em.find(Currency.class, id));
     }
 
     private Currency createCurrency(Valute valute) {

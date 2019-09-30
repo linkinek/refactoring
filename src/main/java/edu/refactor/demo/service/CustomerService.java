@@ -1,5 +1,6 @@
 package edu.refactor.demo.service;
 
+import edu.refactor.demo.dao.BillingAccountDAO;
 import edu.refactor.demo.dao.CustomerDAO;
 import edu.refactor.demo.entity.BillingAccount;
 import edu.refactor.demo.entity.Customer;
@@ -20,17 +21,21 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import static edu.refactor.demo.entity.status.CategoryEnum.DEFAULT;
+import static edu.refactor.demo.entity.status.CustomerStatusEnum.ACTIVE;
+import static edu.refactor.demo.entity.status.CustomerStatusEnum.FREEZE;
+
 @Service
 public class CustomerService {
     private CustomerDAO customerDAO;
 
-    private EntityManagerFactory entityManagerFactory;
+    private BillingAccountDAO billingAccountDAO;
 
     //TODO please add logs for all methods...
     @Autowired
-    public CustomerService(CustomerDAO customerDAO, EntityManagerFactory entityManagerFactory) {
+    public CustomerService(CustomerDAO customerDAO, BillingAccountDAO billingAccountDAO) {
         this.customerDAO = customerDAO;
-        this.entityManagerFactory = entityManagerFactory;
+        this.billingAccountDAO = billingAccountDAO;
     }
 
     public void freeze(String login, String email) {
@@ -41,7 +46,7 @@ public class CustomerService {
         }
 
         Customer customer = customerOptional.get();
-        customer.setStatus(CustomerStatusEnum.FREEZE);
+        customer.setStatus(FREEZE);
 
         customerDAO.save(customer);
     }
@@ -65,7 +70,7 @@ public class CustomerService {
         }
 
         Customer customer = customerOptional.get();
-        customer.setStatus(CustomerStatusEnum.ACTIVE);
+        customer.setStatus(ACTIVE);
 
         customerDAO.save(customer);
     }
@@ -74,33 +79,21 @@ public class CustomerService {
         return customerDAO.retrieveBillingAccounts(login, email);
     }
 
-    @RequestMapping(value = "/customer/create", method = RequestMethod.POST)
-    public @ResponseBody
-    Customer create(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction tx = entityManager.getTransaction();
-        tx.begin();
-        Iterable<Customer> customers = customerDAO.findAll();
-        for (Customer customer : customers) {
-            if (customer.getLogin().equals(login) || customer.getEmail().equals(email)) {
-                throw new RuntimeException("Create customer error");
-            }
-        }
+    public void create(String login, String email) {
         Customer customer = new Customer();
 
         customer.setEmail(email);
         customer.setLogin(login);
-        customer.setCategory(CategoryEnum.DEFAULT);
+        customer.setCategory(DEFAULT);
         customer.setRegistration(Instant.now());
-        customer.setStatus(CustomerStatusEnum.ACTIVE);
-        customer = entityManager.merge(customer);
+        customer.setStatus(ACTIVE);
+
+        customer = customerDAO.save(customer);
 
         BillingAccount billingAccount = new BillingAccount();
         billingAccount.setCustomer(customer);
         billingAccount.setCreationDate(Instant.now());
-        billingAccount = entityManager.merge(billingAccount);
 
-        tx.commit();
-        return entityManager.find(Customer.class, billingAccount.getCustomer().getId());
+        billingAccountDAO.save(billingAccount);
     }
 }

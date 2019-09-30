@@ -18,6 +18,7 @@ public class CurrencyService {
     public static final String VAL_CURS_FROM_CBR_URL = "http://www.cbr.ru/scripts/XML_daily_eng.asp";
 
     private CurrencyDAO currencyDAO;
+
     private XmlMapper xmlMapper;
 
     @Autowired

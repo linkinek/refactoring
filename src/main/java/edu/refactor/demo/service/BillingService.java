@@ -38,11 +38,11 @@ public class BillingService {
     }
 
     public void completeRent(Long vehicleRentId) {
-        Optional<VehicleRental> vehicleRentalOpt = vehicleRentalDAO.findActiveById(vehicleRentId);
+        Optional<VehicleRental> vehicleRentalOpt = vehicleRentalDAO.findActiveRent(vehicleRentId);
 
         if (!vehicleRentalOpt.isPresent()) {
             throw new VehicleRentalNotFoundException(
-                    String.format("Vehicle rental [%d] not found", vehicleRentId));
+                    String.format("Active vehicle rental [%d] not found", vehicleRentId));
         }
 
         VehicleRental rental = vehicleRentalOpt.get();

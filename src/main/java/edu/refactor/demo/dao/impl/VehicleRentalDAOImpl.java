@@ -16,9 +16,6 @@ import java.util.Optional;
 
 @Repository
 public class VehicleRentalDAOImpl implements VehicleRentalDAO {
-    private static final Logger logger = LoggerFactory.getLogger(VehicleRentalDAOImpl.class);
-
-    public static final String SELECT_RENT_ALL_QUERY = "select e from VehicleRental e";
 
     @PersistenceContext
     private EntityManager em;
@@ -26,7 +23,8 @@ public class VehicleRentalDAOImpl implements VehicleRentalDAO {
     @Transactional
     @Override
     public List<VehicleRental> findAll() {
-        return em.createQuery(SELECT_RENT_ALL_QUERY, VehicleRental.class).getResultList();
+        return em.createQuery("select e from VehicleRental e", VehicleRental.class)
+                .getResultList();
     }
 
     @Transactional
@@ -54,15 +52,6 @@ public class VehicleRentalDAOImpl implements VehicleRentalDAO {
                 "vr.status = :status and v.id = :vehicleId", VehicleRental.class)
                 .setParameter("status", RentStatusEnum.ACTIVE)
                 .setParameter("vehicleId", vehicleId)
-                .getSingleResult());
-    }
-
-    @Transactional
-    @Override
-    public Optional<VehicleRental> findActiveById(Long vehicleRentId) {
-        return Optional.of(em.createQuery("select vr from VehicleRental vr where " +
-                "vr.id = :vehicleRentId", VehicleRental.class)
-                .setParameter("vehicleRentId", vehicleRentId.toString())
                 .getSingleResult());
     }
 

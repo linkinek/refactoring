@@ -1,5 +1,6 @@
 package edu.refactor.demo.rest.controller;
 
+import edu.refactor.demo.dao.BillingAccountDAO;
 import edu.refactor.demo.dao.CustomerDAO;
 import edu.refactor.demo.entity.BillingAccount;
 import edu.refactor.demo.entity.Customer;
@@ -26,6 +27,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static edu.refactor.demo.entity.status.CategoryEnum.DEFAULT;
+import static edu.refactor.demo.entity.status.CustomerStatusEnum.ACTIVE;
+import static edu.refactor.demo.entity.status.CustomerStatusEnum.DELETE;
 import static java.lang.String.format;
 
 @RestController
@@ -35,14 +39,16 @@ public class CustomerRestController {
     private static final Logger logger = LoggerFactory.getLogger(CurrencyService.class);
 
     private CustomerDAO customerDAO;
-    private EntityManagerFactory entityManagerFactory;
+
     private CustomerService customerService;
 
+    private BillingAccountDAO billingAccountDAO;
+
     @Autowired
-    public CustomerRestController(CustomerDAO customerDAO, EntityManagerFactory entityManagerFactory,
+    public CustomerRestController(CustomerDAO customerDAO, BillingAccountDAO billingAccountDAO,
                                   CustomerService customerService) {
         this.customerDAO = customerDAO;
-        this.entityManagerFactory = entityManagerFactory;
+        this.billingAccountDAO = billingAccountDAO;
         this.customerService = customerService;
     }
 
@@ -50,7 +56,7 @@ public class CustomerRestController {
     public @ResponseBody
     List<Customer> getAll() {
         return customerDAO.findAll().stream()
-                .filter(e -> !"delete".equals(e.getStatus()))
+                .filter(e -> DELETE != e.getStatus())
                 .collect(Collectors.toList());
     }
 
@@ -86,7 +92,8 @@ public class CustomerRestController {
 
     @RequestMapping(value = "/customer/active", method = RequestMethod.POST)
     public @ResponseBody
-    ResponseEntity active(@RequestParam(name = "login") String login, @RequestParam(name = "email") String email) {
+    ResponseEntity active(@RequestParam(name = "login") String login,
+                          @RequestParam(name = "email") String email) {
         try {
             customerService.active(login, email);
 
@@ -118,24 +125,7 @@ public class CustomerRestController {
                     "with login %s and email %s", login, email));
         }
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction tx = entityManager.getTransaction();
-        tx.begin();
-
-        Customer customer = new Customer();
-        customer.setEmail(email);
-        customer.setLogin(login);
-        customer.setCategory(CategoryEnum.DEFAULT);
-        customer.setRegistration(Instant.now());
-        customer.setStatus(CustomerStatusEnum.ACTIVE);
-        customer = entityManager.merge(customer);
-
-        BillingAccount billingAccount = new BillingAccount();
-        billingAccount.setCustomer(customer);
-        billingAccount.setCreationDate(Instant.now());
-        entityManager.merge(billingAccount);
-
-        tx.commit();
+        customerService.create(login, email);
 
         return ResponseEntity.ok().build();
     }

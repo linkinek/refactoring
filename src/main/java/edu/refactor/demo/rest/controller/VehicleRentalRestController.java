@@ -9,6 +9,7 @@ import edu.refactor.demo.rest.dto.response.ResponseVehicleRent;
 import edu.refactor.demo.service.BillingService;
 import edu.refactor.demo.service.VehicleRentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,13 +48,14 @@ public class VehicleRentalRestController {
     }
 
     @RequestMapping(value = "/rental/complete", method = RequestMethod.POST)
-    public void completeVehicle(@RequestParam(name = "rental") Long rentalId) {
+    public ResponseEntity completeVehicle(@RequestParam(name = "rental") Long rentalId) {
         billingService.completeRent(rentalId);
+
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/rental/active", method = RequestMethod.POST)
-    public @ResponseBody
-    boolean activeVehicle(@RequestParam(name = "rental") Long rentalId) {
+    public ResponseEntity activeVehicle(@RequestParam(name = "rental") Long rentalId) {
         Optional<VehicleRental> rental = vehicleRentalDao.findById(rentalId);
 
         if (!rental.isPresent()) {
@@ -68,15 +70,14 @@ public class VehicleRentalRestController {
 
             vehicleRentalDao.save(vehicleRental);
 
-            return true;
+            return ResponseEntity.ok().build();
         }
 
-        return false;
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @RequestMapping(value = "/rental/expired", method = RequestMethod.POST)
-    public @ResponseBody
-    boolean expiredVehicle(@RequestParam(name = "rental") Long rentalId) {
+    public ResponseEntity expiredVehicle(@RequestParam(name = "rental") Long rentalId) {
         Optional<VehicleRental> rental = vehicleRentalDao.findById(rentalId);
 
         if (!rental.isPresent()) {
@@ -90,15 +91,16 @@ public class VehicleRentalRestController {
 
             vehicleRentalDao.save(vehicleRental);
 
-            return true;
+            return ResponseEntity.ok().build();
         }
 
-        return false;
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @RequestMapping(value = "/request", method = RequestMethod.POST)
-    public ResponseVehicleRent requestForVehicleRent(@Valid RequestVehicleRent requestRent) {
-        VehicleRental vehicleRental = vehicleRentService.createVehicleRental(requestRent);
-        return new ResponseVehicleRent(vehicleRental.getId(), vehicleRental.getStatus());
+    public ResponseEntity<ResponseVehicleRent> requestForVehicleRent(@Valid RequestVehicleRent requestRent) {
+        VehicleRental rental = vehicleRentService.createVehicleRental(requestRent);
+
+        return ResponseEntity.ok(new ResponseVehicleRent(rental.getId(), rental.getStatus()));
     }
 }
