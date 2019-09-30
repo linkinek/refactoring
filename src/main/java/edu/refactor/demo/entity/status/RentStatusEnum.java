@@ -7,28 +7,28 @@ import java.util.List;
 
 import static java.util.Collections.singletonList;
 
-public enum RentStatusEnum implements EnumClass<String>, CurrentState<RentStatusEnum> {
+public enum RentStatusEnum implements EnumClass<String>, CurrentState<String> {
 
     CREATED("created", new ArrayList<>()),
-    EXPIRED("expired", singletonList(RentStatusEnum.ACTIVE)),
+    EXPIRED("expired", singletonList("active")),
     ACTIVE("active", new ArrayList<>()),
-    COMPLETED("completed", singletonList(RentStatusEnum.ACTIVE));
+    COMPLETED("completed", singletonList("active"));
 
     protected String id;
-    protected List<RentStatusEnum> currentStatuses;
+    protected List<String> currentStatuses;
 
-    RentStatusEnum(String id, List<RentStatusEnum> currentStatuses) {
+    RentStatusEnum(String id, List<String> currentStatuses) {
         this.id = id;
         this.currentStatuses = currentStatuses;
     }
 
     @Override
-    public List<RentStatusEnum> getCurrentStatuses() {
-        return null;
+    public List<String> getCurrentStatuses() {
+        return currentStatuses;
     }
 
     @Override
-    public boolean hasCurrentStatuses(RentStatusEnum status) {
+    public boolean hasCurrentStatuses(String status) {
         return currentStatuses.contains(status);
     }
 

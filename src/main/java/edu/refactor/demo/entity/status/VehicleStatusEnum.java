@@ -6,20 +6,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public enum VehicleStatusEnum implements EnumClass<String>, CurrentState<VehicleStatusEnum> {
+public enum VehicleStatusEnum implements EnumClass<String>, CurrentState<String> {
 
     DELETE("delete", new ArrayList<>()),
-    OPEN("open", Arrays.asList(VehicleStatusEnum.DELETE, VehicleStatusEnum.RESERVED)),
-    SERVICE("service", Arrays.asList(VehicleStatusEnum.OPEN)),
-    RESERVED("reserved", Arrays.asList(VehicleStatusEnum.LEASED)),
-    LEASED("leased", Arrays.asList(VehicleStatusEnum.LOST, VehicleStatusEnum.RETURNED)),
+    OPEN("open", Arrays.asList("delete", "reserved")),
+    SERVICE("service", Arrays.asList("open")),
+    RESERVED("reserved", Arrays.asList("leased")),
+    LEASED("leased", Arrays.asList("lost", "returned")),
     LOST("lost", new ArrayList<>()),
-    RETURNED("returned", Arrays.asList(VehicleStatusEnum.SERVICE, VehicleStatusEnum.OPEN));
+    RETURNED("returned", Arrays.asList("service", "open"));
 
     protected String id;
-    protected List<VehicleStatusEnum> currentStatuses;
+    protected List<String> currentStatuses;
 
-    VehicleStatusEnum(String value, List<VehicleStatusEnum> currentStatuses) {
+    VehicleStatusEnum(String value, List<String> currentStatuses) {
         this.id = value;
         this.currentStatuses = currentStatuses;
     }
@@ -40,12 +40,12 @@ public enum VehicleStatusEnum implements EnumClass<String>, CurrentState<Vehicle
     }
 
     @Override
-    public List<VehicleStatusEnum> getCurrentStatuses() {
+    public List<String> getCurrentStatuses() {
         return currentStatuses;
     }
 
     @Override
-    public boolean hasCurrentStatuses(VehicleStatusEnum status) {
+    public boolean hasCurrentStatuses(String status) {
         return currentStatuses.contains(status);
     }
 
