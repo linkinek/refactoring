@@ -71,7 +71,7 @@ public class VehicleDAOImpl implements VehicleDAO {
         Vehicle vehicle = findByIdNN(vehicleId);
 
         VehicleStatusEnum status = vehicle.getStatus();
-        if (!status.hasCurrentStatuses(nextStatus)) {
+        if (!status.hasCurrentStatuses(nextStatus.getId())) {
             throw new VehicleNotFoundException("The following status is not in the range");
         }
 
