@@ -56,7 +56,7 @@ public class BillingAccount implements Serializable {
         return currency;
     }
 
-    public void setCurrencyType(Currency currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 

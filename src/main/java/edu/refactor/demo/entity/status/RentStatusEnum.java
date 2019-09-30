@@ -1,16 +1,18 @@
 package edu.refactor.demo.entity.status;
 
-import org.assertj.core.util.Lists;
 import org.springframework.lang.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 public enum RentStatusEnum implements EnumClass<String>, CurrentState<RentStatusEnum> {
 
-    CREATED("created", Lists.newArrayList()),
-    EXPIRED("expired", Lists.newArrayList(RentStatusEnum.ACTIVE)),
-    ACTIVE("active", Lists.newArrayList()),
-    COMPLETED("completed", Lists.newArrayList(RentStatusEnum.ACTIVE));
+    CREATED("created", new ArrayList<>()),
+    EXPIRED("expired", singletonList(RentStatusEnum.ACTIVE)),
+    ACTIVE("active", new ArrayList<>()),
+    COMPLETED("completed", singletonList(RentStatusEnum.ACTIVE));
 
     protected String id;
     protected List<RentStatusEnum> currentStatuses;

@@ -31,6 +31,12 @@ public class CurrencyDAOImpl implements CurrencyDAO {
         }
     }
 
+    @Transactional
+    @Override
+    public Currency findById(String id) {
+        return em.find(Currency.class, id);
+    }
+
     private Currency createCurrency(Valute valute) {
         Currency currency = new Currency();
 
