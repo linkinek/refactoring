@@ -48,15 +48,23 @@ public class BillingService {
         VehicleRental rental = vehicleRentalOpt.get();
         Customer customer = rental.getCustomer();
 
-        BigDecimal rentCost = calculateCostRent(rental);
+        BigDecimal rentCostRub = calculateCostRent(rental);
 
         List<BillingAccount> accounts = billingAccountDAO.findByCustomerId(customer.getId());
 
         for (BillingAccount account : accounts) {
-            BigDecimal balanceRub = convertAccountRub(account);
+            BigDecimal balanceRub = convertBalanceToRub(account);
 
-            if (isAccountPayable(balanceRub, rentCost)) {
-                payRent(rental, account, balanceRub);
+            if (isAccountPayable(balanceRub, rentCostRub)) {
+                logger.info("Pay vehicle rental[{}] from account[{}]", rental.getId(), account.getId());
+
+                BigDecimal availableBalanceRub = balanceRub.subtract(rentCostRub);
+
+                BigDecimal availableBalanceConverted =
+                        convertBalanceToAccountCurrency(account, availableBalanceRub);
+
+                payRent(rental, account, availableBalanceConverted);
+
                 return;
             }
         }
@@ -77,8 +85,8 @@ public class BillingService {
         return vehicle.getPrice().multiply(new BigDecimal(rentalDays));
     }
 
-    private BigDecimal convertAccountRub(BillingAccount account) {
-        logger.info("Try to convert account balance to RUB");
+    private BigDecimal convertBalanceToRub(BillingAccount account) {
+        logger.info("Try to convert account[{}] balance to RUB", account.getId());
 
         Currency currency = account.getCurrency();
 
@@ -90,12 +98,25 @@ public class BillingService {
         return currentRubRate.multiply(account.getBalance());
     }
 
+    private BigDecimal convertBalanceToAccountCurrency(BillingAccount account, BigDecimal balance) {
+        Currency currency = account.getCurrency();
+
+        logger.info("Try to convert from RUB to {}", currency.getCurrencyType());
+
+        BigDecimal currentRubRate = currency.getValue().divide(
+                new BigDecimal(currency.getNominal()), 4, ROUND_HALF_UP);
+
+        return balance.divide(currentRubRate, 4, ROUND_HALF_UP);
+    }
+
     private boolean isAccountPayable(BigDecimal balance, BigDecimal rentCost) {
+        logger.info("Check in payable account");
+
         return balance.compareTo(rentCost) >= 0;
     }
 
     private void payRent(VehicleRental rental, BillingAccount account, BigDecimal availableBalance) {
-        logger.info("Complete rental[{}],", rental.getId());
+        logger.info("Vehicle rental[{}] is completed,", rental.getId());
 
         account.setBalance(availableBalance);
         billingAccountDAO.save(account);
