@@ -3,8 +3,13 @@ package edu.refactor.demo.service;
 import edu.refactor.demo.dao.CustomerDAO;
 import edu.refactor.demo.entity.BillingAccount;
 import edu.refactor.demo.entity.Customer;
+import edu.refactor.demo.entity.status.CustomerStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -39,7 +44,7 @@ public class CustomerService {
         Iterable<Customer> cs = customerDAO.findAll();
         for (Customer c : cs) {
             if (c.getLogin().equals(login) && c.getEmail().equals(email)) {
-                c.setStatus("freeze");
+                c.setStatus(CustomerStatusEnum.FREEZE);
                 return customerDAO.save(c);
             }
         }
@@ -52,7 +57,7 @@ public class CustomerService {
         Iterable<Customer> customers = customerDAO.findAll();
         for (Customer customer : customers) {
             if (customer.getLogin().equals(login) && customer.getEmail().equals(email)) {
-                customer.setStatus("delete");
+                customer.setStatus(CustomerStatusEnum.DEFAULT);
                 return customerDAO.save(customer);
             }
         }
@@ -65,7 +70,7 @@ public class CustomerService {
         Iterable<Customer> cs = customerDAO.findAll();
         for (Customer c : cs) {
             if (c.getLogin().equals(login) && c.getEmail().equals(email)) {
-                c.setStatus("active");
+                c.setStatus(CustomerStatusEnum.ACTIVE);
                 return customerDAO.save(c);
             }
         }
@@ -101,7 +106,7 @@ public class CustomerService {
         customer.setLogin(login);
         customer.setCategory("default");
         customer.setRegistration(Instant.now());
-        customer.setStatus("active");
+        customer.setStatus(CustomerStatusEnum.ACTIVE);
         customer = entityManager.merge(customer);
 
         BillingAccount billingAccount = new BillingAccount();
