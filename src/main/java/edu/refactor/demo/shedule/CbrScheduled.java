@@ -23,6 +23,6 @@ public class CbrScheduled {
     public void loadCurrenciesDataFromCbr() {
         logger.info("Try to load currencies data from CBR");
 
-        currencyService.loadCurrenciesFromCbr();
+        currencyService.syncCurrenciesFromCbr();
     }
 }

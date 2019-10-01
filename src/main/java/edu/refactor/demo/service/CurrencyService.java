@@ -12,5 +12,5 @@ public interface CurrencyService {
     /**
      * Операция выгрузки актуальных курсов валют в рублях из ЦентраБанка
      */
-    void loadCurrenciesFromCbr();
+    void syncCurrenciesFromCbr();
 }

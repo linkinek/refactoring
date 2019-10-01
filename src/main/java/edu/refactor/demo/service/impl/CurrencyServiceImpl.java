@@ -27,7 +27,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public void loadCurrenciesFromCbr(){
+    public void syncCurrenciesFromCbr(){
         ResponseEntity<String> response = new RestTemplate()
                 .getForEntity(ACTUAL_CURRENCY_FROM_CBR_URL, String.class);
 
