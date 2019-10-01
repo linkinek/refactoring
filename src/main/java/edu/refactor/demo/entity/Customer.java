@@ -3,7 +3,6 @@ package edu.refactor.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.refactor.demo.entity.status.CategoryEnum;
 import edu.refactor.demo.entity.status.CustomerStatusEnum;
-import edu.refactor.demo.entity.status.RentStatusEnum;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -21,29 +21,32 @@ import java.util.List;
 public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Column
-    private String login;
-
-    @Column
-    private String email;
-
-    @Column
-    private Instant registration;
-
-    @Column(name = "STATUS")
-    private String status;
-
     @Id
     @GeneratedValue
     @Column
     private Long id;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VehicleRental> rentals = new ArrayList<>();
+    @NotNull
+    @Column
+    private String login;
+
+    @NotNull
+    @Column
+    private String email;
+
+    @Column
+    private Instant registrationDate;
+
+    @NotNull
+    @Column(name = "STATUS")
+    private String status;
 
     @Column
     private String category;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VehicleRental> rentals = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -65,12 +68,12 @@ public class Customer implements Serializable {
         this.email = email;
     }
 
-    public Instant getRegistration() {
-        return registration;
+    public Instant getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegistration(Instant registration) {
-        this.registration = registration;
+    public void setRegistrationDate(Instant registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public CustomerStatusEnum getStatus() {

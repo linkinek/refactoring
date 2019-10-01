@@ -60,7 +60,7 @@ public class VehicleDAOImpl implements VehicleDAO {
 
         if (vehicle == null) {
             throw new VehicleNotFoundException(
-                    String.format("Vehicle[%d] not found", id));
+                    String.format("Vehicle[%s] not found", id));
         }
 
         return vehicle;

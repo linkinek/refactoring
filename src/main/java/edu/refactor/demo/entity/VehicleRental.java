@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -20,10 +21,12 @@ public class VehicleRental implements Serializable {
     @Column
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -31,6 +34,7 @@ public class VehicleRental implements Serializable {
     @Column
     private Instant startDate;
 
+    @NotNull
     @Column(name = "STATUS")
     private String status;
 

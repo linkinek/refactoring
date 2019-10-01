@@ -3,16 +3,15 @@ package edu.refactor.demo.entity.status;
 import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Collections.singletonList;
 
 public enum RentStatusEnum implements EnumClass<String>, CurrentState<String> {
 
     CREATED("created", new ArrayList<>()),
-    EXPIRED("expired", singletonList("active")),
+    EXPIRED("expired", Arrays.asList("active")),
     ACTIVE("active", new ArrayList<>()),
-    COMPLETED("completed", singletonList("active"));
+    COMPLETED("completed", Arrays.asList("active"));
 
     protected String id;
     protected List<String> currentStatuses;

@@ -5,6 +5,7 @@ import edu.refactor.demo.entity.currency.soup.model.CurrencyType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -17,15 +18,18 @@ public class Currency implements Serializable {
     private String id;
 
     @Column
+    @NotNull
     private CurrencyType currencyType;
 
     @Column
     private String fullName;
 
     @Column
+    @NotNull
     private Integer nominal;
 
     @Column
+    @NotNull
     private BigDecimal value;
 
     public String getId() {

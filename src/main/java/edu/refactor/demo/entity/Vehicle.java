@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.refactor.demo.entity.status.VehicleStatusEnum;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,13 +19,19 @@ public class Vehicle implements Serializable {
     @Column
     private Long id;
 
+    @NotNull
+    @Column
+    private String serialNumber;
+
     @Column
     private String title;
 
     @Column
+    @NotNull
     private BigDecimal price;
 
     @Column(name = "STATUS")
+    @NotNull
     private String status;
 
     @Column
@@ -33,9 +40,6 @@ public class Vehicle implements Serializable {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleRental> rentals = new ArrayList<>();
-
-    @Column
-    private String serialNumber;
 
     public Long getId() {
         return id;

@@ -4,19 +4,10 @@ import edu.refactor.demo.dao.BillingAccountDAO;
 import edu.refactor.demo.dao.CustomerDAO;
 import edu.refactor.demo.entity.BillingAccount;
 import edu.refactor.demo.entity.Customer;
-import edu.refactor.demo.entity.status.CategoryEnum;
-import edu.refactor.demo.entity.status.CustomerStatusEnum;
 import edu.refactor.demo.exception.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +76,7 @@ public class CustomerService {
         customer.setEmail(email);
         customer.setLogin(login);
         customer.setCategory(DEFAULT);
-        customer.setRegistration(Instant.now());
+        customer.setRegistrationDate(Instant.now());
         customer.setStatus(ACTIVE);
 
         customer = customerDAO.save(customer);

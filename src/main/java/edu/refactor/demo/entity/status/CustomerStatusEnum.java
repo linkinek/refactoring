@@ -15,7 +15,6 @@ public enum  CustomerStatusEnum implements EnumClass<String>, TimeOut {
 
     CustomerStatusEnum(String id, int timeOut) {
         this.id = id;
-
         this.timeOut = timeOut;
     }
 

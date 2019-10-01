@@ -1,11 +1,8 @@
 package edu.refactor.demo.rest.controller;
 
-import edu.refactor.demo.dao.BillingAccountDAO;
 import edu.refactor.demo.dao.CustomerDAO;
 import edu.refactor.demo.entity.BillingAccount;
 import edu.refactor.demo.entity.Customer;
-import edu.refactor.demo.entity.status.CategoryEnum;
-import edu.refactor.demo.entity.status.CustomerStatusEnum;
 import edu.refactor.demo.exception.CustomerAlreadyExistsException;
 import edu.refactor.demo.exception.CustomerNotFoundException;
 import edu.refactor.demo.service.CurrencyService;
@@ -20,17 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static edu.refactor.demo.entity.status.CategoryEnum.DEFAULT;
-import static edu.refactor.demo.entity.status.CustomerStatusEnum.ACTIVE;
 import static edu.refactor.demo.entity.status.CustomerStatusEnum.DELETE;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping(value = "/customer")
@@ -42,13 +34,9 @@ public class CustomerRestController {
 
     private CustomerService customerService;
 
-    private BillingAccountDAO billingAccountDAO;
-
     @Autowired
-    public CustomerRestController(CustomerDAO customerDAO, BillingAccountDAO billingAccountDAO,
-                                  CustomerService customerService) {
+    public CustomerRestController(CustomerDAO customerDAO, CustomerService customerService) {
         this.customerDAO = customerDAO;
-        this.billingAccountDAO = billingAccountDAO;
         this.customerService = customerService;
     }
 
@@ -57,7 +45,7 @@ public class CustomerRestController {
     List<Customer> getAll() {
         return customerDAO.findAll().stream()
                 .filter(e -> DELETE != e.getStatus())
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @RequestMapping(value = "/customer/freeze", method = RequestMethod.POST)
