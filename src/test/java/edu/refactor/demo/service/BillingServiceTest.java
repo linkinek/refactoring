@@ -50,7 +50,8 @@ public class BillingServiceTest extends AbstractDefaultServiceTest {
         Vehicle vehicle = vehicleBuilder
                 .id(1L)
                 .price(new BigDecimal(5000))
-                .status(OPEN).build();
+                .status(OPEN)
+                .build();
 
         Customer customer = customerBuilder
                 .id(2L)
@@ -98,9 +99,7 @@ public class BillingServiceTest extends AbstractDefaultServiceTest {
 
     @Test
     public void completeRent() {
-        //calculate cost and complete rental
-        billingService.completeRent(3L);
-
+        //find rental and account
         Optional<VehicleRental> rentalOpt = vehicleRentalDAO.findById(3L);
         Optional<BillingAccount> accountOpt = billingAccountDAO.findById(1L);
 
@@ -110,6 +109,9 @@ public class BillingServiceTest extends AbstractDefaultServiceTest {
 
         VehicleRental rental = rentalOpt.get();
         BillingAccount account = accountOpt.get();
+
+        //calculate cost and complete rental
+        billingService.completeRent(rental.getId());
 
         //check state rental
         Assert.assertEquals("Rental is not completed",rental.getStatus(), COMPLETED);
