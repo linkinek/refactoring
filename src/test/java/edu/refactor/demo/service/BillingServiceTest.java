@@ -7,6 +7,7 @@ import edu.refactor.demo.entity.Customer;
 import edu.refactor.demo.entity.Vehicle;
 import edu.refactor.demo.entity.VehicleRental;
 import edu.refactor.demo.entity.currency.Currency;
+import edu.refactor.demo.service.impl.BillingServiceImpl;
 import edu.refactor.demo.service.util.AbstractDefaultServiceTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,7 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 public class BillingServiceTest extends AbstractDefaultServiceTest {
 
     @InjectMocks
-    private BillingService billingService;
+    private BillingServiceImpl billingService;
 
     @Mock
     private VehicleRentalDAO vehicleRentalDAO;

@@ -50,7 +50,7 @@ public class Customer implements Serializable {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BillingAccount> billingAccounts;
+    private List<BillingAccount> billingAccounts = new ArrayList<>();
 
     public String getLogin() {
         return login;

@@ -1,4 +1,4 @@
-package edu.refactor.demo.service;
+package edu.refactor.demo.service.impl;
 
 import edu.refactor.demo.dao.BillingAccountDAO;
 import edu.refactor.demo.dao.VehicleRentalDAO;
@@ -11,6 +11,7 @@ import edu.refactor.demo.entity.status.CustomerStatusEnum;
 import edu.refactor.demo.entity.status.RentStatusEnum;
 import edu.refactor.demo.exception.CompleteRentException;
 import edu.refactor.demo.exception.VehicleRentalNotFoundException;
+import edu.refactor.demo.service.BillingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

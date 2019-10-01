@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ValCurs implements Serializable {
 
     @JacksonXmlProperty(localName = "Valute")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<Valute> valutes;
+    private List<Valute> valutes = new ArrayList<>();
 
     public Date getDate() {
         return date;
