@@ -12,6 +12,8 @@ public interface CustomerDAO {
 
     List<Customer> findAll();
 
+    List<Customer> findAllWithoutDeleted();
+
     long count();
 
     Optional<Customer> findById(Long id);

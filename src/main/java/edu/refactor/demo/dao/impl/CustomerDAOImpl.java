@@ -24,6 +24,13 @@ public class CustomerDAOImpl implements CustomerDAO {
                 .getResultList();
     }
 
+    @Override
+    public List<Customer> findAllWithoutDeleted() {
+        return em.createQuery("select e from Customer e " +
+                "where e.status is not 'delete'", Customer.class)
+                .getResultList();
+    }
+
     @Transactional
     @Override
     public long count() {

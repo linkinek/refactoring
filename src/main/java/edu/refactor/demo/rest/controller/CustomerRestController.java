@@ -43,9 +43,7 @@ public class CustomerRestController {
     @RequestMapping(value = "/customer", method = RequestMethod.GET)
     public @ResponseBody
     List<Customer> getAll() {
-        return customerDAO.findAll().stream()
-                .filter(e -> DELETE != e.getStatus())
-                .collect(toList());
+        return customerDAO.findAllWithoutDeleted();
     }
 
     @RequestMapping(value = "/customer/freeze", method = RequestMethod.POST)
