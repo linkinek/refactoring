@@ -2,6 +2,7 @@ package edu.refactor.demo.service.impl;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import edu.refactor.demo.dao.CurrencyDAO;
+import edu.refactor.demo.entity.currency.Currency;
 import edu.refactor.demo.entity.currency.soup.model.ValCurs;
 import edu.refactor.demo.service.CurrencyService;
 import org.slf4j.Logger;
@@ -12,9 +13,15 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+
+import static java.math.BigDecimal.ROUND_HALF_UP;
+
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
     private static final Logger logger = LoggerFactory.getLogger(CurrencyServiceImpl.class);
+
+    public static final int SCALE = 4;
 
     private CurrencyDAO currencyDAO;
 
@@ -39,6 +46,18 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
 
         currencyDAO.saveAll(valCurs);
+    }
+
+    @Override
+    public BigDecimal convertRubToCurrency(BigDecimal money, Currency currency){
+        logger.info("Convert money to {}", currency.getCurrencyType());
+
+        BigDecimal value = currency.getValue();
+
+        BigDecimal currentRubRate = value.divide(
+                new BigDecimal(currency.getNominal()), SCALE, ROUND_HALF_UP);
+
+        return money.divide(currentRubRate, SCALE, ROUND_HALF_UP);
     }
 
     @Nullable

@@ -1,16 +1,23 @@
 package edu.refactor.demo.service;
 
 
+import edu.refactor.demo.entity.currency.Currency;
+
+import java.math.BigDecimal;
+
 /**
  * Сервис предназначен для операциий со счетами заказчиков
  */
 public interface BillingService {
 
     /**
-     * <p>Операция завершения аренды автомобиля.</p>
-     * <p> Снятие средств с одного из аккаунтов заказчика и перевод аренды в статус: завершено</p>
+     * <p>Операция снфтия средств со счета</p>
      *
-     * @param vehicleRentId идентификатор активной аренды автомобиля
+     * @param money кол-во денег, которые необходимо снять,
+     *              деньги должны быть в валюте аккауната {@link CurrencyService#convertRubToCurrency}
+     * @param accountId идентификатор счета клиента
+     *
+     * @return результат операции
      */
-    void completeRent(Long vehicleRentId);
+    boolean cashWithdrawal(BigDecimal money, Long accountId);
 }
