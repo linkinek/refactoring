@@ -10,13 +10,13 @@ import edu.refactor.demo.rest.dto.response.ResponseVehicleRent;
 import edu.refactor.demo.service.BillingService;
 import edu.refactor.demo.service.CurrencyService;
 import edu.refactor.demo.service.VehicleRentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,6 +30,7 @@ import static edu.refactor.demo.entity.status.RentStatusEnum.EXPIRED;
 @RestController
 @RequestMapping(value = "/vehicle-rental")
 public class VehicleRentalRestController {
+
     private VehicleRentalDAO vehicleRentalDao;
 
     private VehicleRentService vehicleRentService;
@@ -38,7 +39,7 @@ public class VehicleRentalRestController {
 
     private CurrencyService currencyService;
 
-    @Autowired
+    @Inject
     public VehicleRentalRestController(VehicleRentalDAO vehicleRentalDao,
                                        BillingService billingService,
                                        CurrencyService currencyService,

@@ -7,12 +7,12 @@ import edu.refactor.demo.entity.currency.soup.model.ValCurs;
 import edu.refactor.demo.service.CurrencyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
@@ -27,7 +27,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     private XmlMapper xmlMapper;
 
-    @Autowired
+    @Inject
     public CurrencyServiceImpl(CurrencyDAO currencyDAO, XmlMapper xmlMapper) {
         this.currencyDAO = currencyDAO;
         this.xmlMapper = xmlMapper;

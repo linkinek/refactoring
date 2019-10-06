@@ -5,9 +5,9 @@ import edu.refactor.demo.dao.CustomerDAO;
 import edu.refactor.demo.entity.BillingAccount;
 import edu.refactor.demo.entity.Customer;
 import edu.refactor.demo.exception.CustomerNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +22,7 @@ public class CustomerService {
 
     private BillingAccountDAO billingAccountDAO;
 
-    //TODO please add logs for all methods...
-    @Autowired
+    @Inject
     public CustomerService(CustomerDAO customerDAO, BillingAccountDAO billingAccountDAO) {
         this.customerDAO = customerDAO;
         this.billingAccountDAO = billingAccountDAO;

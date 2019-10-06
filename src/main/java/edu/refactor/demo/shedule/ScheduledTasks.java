@@ -3,9 +3,10 @@ package edu.refactor.demo.shedule;
 import edu.refactor.demo.service.VehicleRentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
 
 @Component
 public class ScheduledTasks {
@@ -15,7 +16,7 @@ public class ScheduledTasks {
 
     protected VehicleRentService vehicleRentService;
 
-    @Autowired
+    @Inject
     public ScheduledTasks(VehicleRentService vehicleRentService) {
         this.vehicleRentService = vehicleRentService;
     }

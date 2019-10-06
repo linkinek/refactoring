@@ -9,7 +9,6 @@ import edu.refactor.demo.service.CurrencyService;
 import edu.refactor.demo.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,12 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.inject.Inject;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static edu.refactor.demo.entity.status.CustomerStatusEnum.DELETE;
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping(value = "/customer")
@@ -34,7 +31,7 @@ public class CustomerRestController {
 
     private CustomerService customerService;
 
-    @Autowired
+    @Inject
     public CustomerRestController(CustomerDAO customerDAO, CustomerService customerService) {
         this.customerDAO = customerDAO;
         this.customerService = customerService;

@@ -6,9 +6,9 @@ import edu.refactor.demo.exception.BillingAccountNotFoundException;
 import edu.refactor.demo.service.BillingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ public class BillingServiceImpl implements BillingService {
 
     private BillingAccountDAO billingAccountDAO;
 
-    @Autowired
+    @Inject
     public BillingServiceImpl(BillingAccountDAO billingAccountDAO) {
         this.billingAccountDAO = billingAccountDAO;
     }

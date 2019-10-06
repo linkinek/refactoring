@@ -6,13 +6,13 @@ import edu.refactor.demo.entity.status.VehicleStatusEnum;
 import edu.refactor.demo.exception.StatusNotFoundException;
 import edu.refactor.demo.exception.VehicleNotFoundException;
 import edu.refactor.demo.rest.dto.request.RequestVehicle;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public class VehicleRestController {
     private VehicleDAO vehicleDAO;
 
-    @Autowired
+    @Inject
     public VehicleRestController(VehicleDAO vehicleDAO) {
         this.vehicleDAO = vehicleDAO;
     }

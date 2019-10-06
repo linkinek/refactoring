@@ -15,9 +15,9 @@ import edu.refactor.demo.rest.dto.request.RequestVehicleRent;
 import edu.refactor.demo.service.VehicleRentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
@@ -37,7 +37,7 @@ public class VehicleRentServiceImpl implements VehicleRentService {
 
     private VehicleDAO vehicleDAO;
 
-    @Autowired
+    @Inject
     public VehicleRentServiceImpl(VehicleDAO vehicleDAO, VehicleRentalDAO vehicleRentalDAO,
                                   CustomerDAO customerDAO) {
         this.vehicleDAO = vehicleDAO;
